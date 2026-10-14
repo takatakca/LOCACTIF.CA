@@ -1,4 +1,4 @@
-name: LOCACTIF - Site CI et publication
+name: LOCACTIF - CI et Pages optionnel
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
         run: npm run check
 
   publish:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: vars.ENABLE_GITHUB_PAGES == 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: validate
     runs-on: ubuntu-latest
     permissions:
