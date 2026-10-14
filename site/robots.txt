@@ -1,0 +1,3 @@
+# Version de préparation, pas encore le produit définitif.
+User-agent: *
+Disallow: /
