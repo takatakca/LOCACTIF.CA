@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1923">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Explorez les activités et expériences LOCACTIF lorsqu'elles sont publiées et vérifiées.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>Explorer — LOCACTIF</title>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./explore.css">
+<script type="module" src="./explore.js"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Aller au contenu</a>
+<header class="header"><div class="wrap header-inner">
+<a class="logo" href="./index.html"><span class="logo-mark" aria-hidden="true">L<span>.</span></span>LOCACTIF<span class="dot">.</span></a>
+<nav class="explore-nav" aria-label="Navigation principale">
+<a href="./index.html" data-i18n="home">Accueil</a>
+<a href="./explore.html" aria-current="page" data-i18n="explore">Explorer</a>
+</nav>
+<div class="language" role="group" aria-label="Choix de langue" data-lang-group>
+<button type="button" data-lang="fr" aria-pressed="true" lang="fr">FR</button><span aria-hidden="true">/</span><button type="button" data-lang="en" aria-pressed="false" lang="en">EN</button>
+</div></div></header>
+<main id="main">
+<section class="catalog-hero">
+<div class="wrap">
+<p class="eyebrow"><span class="green-dot" aria-hidden="true"></span><span data-i18n="eyebrow">La découverte commence ici</span></p>
+<h1 data-i18n="title">Découvrez ce qui vous fait vibrer.</h1>
+<p data-i18n="description">Activités, expériences, ateliers et découvertes locales. Les offres apparaissent uniquement lorsqu'elles sont publiées par une source vérifiée.</p>
+<form class="catalog-search" role="search" data-search-form>
+<label for="search" data-i18n="searchLabel">Rechercher une expérience</label>
+<div class="search-row"><input id="search" name="q" type="search" autocomplete="off" maxlength="120" data-search placeholder="Activité, mot-clé, lieu..."><button type="submit" data-i18n="searchButton">Rechercher ↗</button></div>
+</form>
+</div></section>
+<section class="wrap catalog-content" aria-labelledby="results-heading">
+<div class="catalog-toolbar">
+<div><p class="kicker" data-i18n="catalogKicker">La sélection</p><h2 id="results-heading" data-i18n="results">Toutes les expériences</h2></div>
+<div class="catalog-tabs" role="group" aria-label="Filtrer les expériences">
+<button type="button" data-view="all" aria-pressed="true" data-i18n="all">Tout voir</button>
+<button type="button" data-view="favorites" aria-pressed="false" data-i18n="favorites">Mes favoris</button>
+</div></div>
+<div class="filter-row"><label for="category" data-i18n="categoryLabel">Catégorie</label><select id="category" data-category><option value="" data-i18n="allCategories">Toutes les catégories</option></select><button type="button" class="clear-filters" data-clear data-i18n="clear">Effacer les filtres</button></div>
+<p class="result-count" role="status" aria-live="polite" data-count></p>
+<div class="experience-grid" data-results></div>
+<div class="catalog-state" data-state hidden><div class="state-icon" aria-hidden="true">✳</div><h3 data-state-title></h3><p data-state-description></p></div>
+</section>
+<section class="wrap catalog-disclaimer"><p data-i18n="disclaimer">Les réservations et les paiements ne sont pas effectués sur cette page. Les offres publiées renvoient vers leur système de réservation officiel. Les favoris sont conservés uniquement sur cet appareil.</p></section>
+</main>
+<footer class="footer"><div class="wrap footer-inner"><a href="./index.html" class="footer-logo">LOCACTIF<span class="dot">.</span></a><span data-i18n="footer">Découvrir, à son rythme.</span><span>© <span data-year>2026</span> LOCACTIF</span></div></footer>
+</body></html>

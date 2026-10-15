@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": {"node": ">=20"},
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "test": "node --test",
-    "check": "node --check site/app.js && node --check site/translations.mjs && npm test"
+    "check": "node --check site/app.js && node --check site/translations.mjs && npm test",
+    "sync:catalog": "node scripts/woocommerce-import.mjs"
   }
 }
