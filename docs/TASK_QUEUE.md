@@ -1,22 +1,26 @@
 # TASK_QUEUE — LOCACTIF.CA
 
-Référence : 2026-10-15. Les critères de fin sont vérifiables, pas des pourcentages.
+État du 2026-10-15 fondé sur Actions GitHub, déploiements Vercel et GET réels.
 
-| ID | État | Priorité | Prochaine tâche et critères |
+| Tâche | État | Priorité | Critère de clôture |
 |---|---|---|---|
-| LOC-001 | TERMINÉ | P0 | Audit GitHub : commit, main, PR, issues, accès et CI |
-| LOC-002 | TERMINÉ | P0 | Accueil responsive FR/EN |
-| LOC-003 | TERMINÉ | P0 | Vercel statique : `outputDirectory=site`, headers, noindex |
-| LOC-004 | TERMINÉ | P1 | Documentation multi-agent et consignes de reprise |
-| LOC-005 | PARTIEL | P0 | Vercel READY SHA exact ; valider par HTTP et navigateur l'alias production |
-| LOC-006 | TERMINÉ | P0 | Catalogue Explorer : recherche, catégories, favoris locaux |
-| LOC-007 | EN ATTENTE DE SOURCE | P0 | Importer les **vraies** offres WooCommerce après inventaire WordPress, revue des prix et des liens, commit validé |
-| LOC-008 | PARTIEL | P0 | Fiche locale `experience.html?id=...` livrée, disponibilité/réservation restent sur la source ; construire la réservation intégrée seulement après définition métier |
-| LOC-009 | BLOQUÉ : ACCÈS | P0 | Identifier installation WordPress historique, plugins de réservation, contrats et données, vérifier Store API sans écrire dans la source |
-| LOC-010 | BLOQUÉ : CONTRAT D'API | P0 | Auth TAKATAK centrale, entitlements LOCACTIF, isolation tenant, favoris synchronisés, historiques |
-| LOC-011 | NON DÉMARRÉ | P1 | Portail opérateurs, messagerie, admin, paiements selon cahier des charges confirmé |
-| LOC-012 | BLOQUÉ : INFRA | P0 | Vérifier locactif.ca, DNS, HTTPS et préserver l'ancien commerce avant la migration |
-| LOC-013 | EN COURS | P0 | Smoke HTTP Vercel automatique, tests réels du navigateur mobile et import WooCommerce |
+| LOC-001 Audit dépôt et décisions | TERMINÉ | P0 | Main, arbre, PR/issues, dernier SHA vérifiés |
+| LOC-002 Accueil bilingue responsive | TERMINÉ | P0 | UI FR/EN et tests intégrés |
+| LOC-003 Sécurité statique / Vercel | PARTIEL | P0 | `site/` publié, .html fonctionne ; divergence headers Vercel à examiner |
+| LOC-004 Journaux de relève | TERMINÉ | P1 | Cinq documents et AGENTS.md |
+| LOC-005 CI et vérification HTTP | TERMINÉ pour le site de préparation | P0 | GitHub CI et smoke HTTP SUCCESS, Vercel READY même SHA |
+| LOC-006 Catalogue Explorer | TERMINÉ côté front | P0 | Recherche/filtres/favoris locaux |
+| LOC-007 Importer offres WooCommerce réelles | BLOQUÉ | P0 | Origine accessible/validée, catalogue examiné et importé sans produits fictifs |
+| LOC-008 Fiches et réservation | PARTIEL | P0 | Fiche/renvoi HTTPS livrés ; slots, commande et paiement non opérationnels |
+| LOC-009 Source WordPress historique | BLOQUÉ HTTP 403/404 | P0 | Localiser origin/WordPress/DB/extensions ou confirmer migration/abandon, voir SOURCE_AUDIT.md |
+| LOC-010 TAKATAK Auth & permissions | BLOQUÉ CONTRAT API | P0 | SSO autorisé, entitlements produit, isolation tenant démontrés côté serveur |
+| LOC-011 Admin opérateurs, paiements, support | NON DÉMARRÉ | P1 | Modèles, API et fonctionnalités selon exigences approuvées |
+| LOC-012 Domaine locactif.ca | BLOQUÉ | P0 | Inventaire WordPress, DNS/HTTPS validés et bascule sans interruption |
+| LOC-013 QA end-to-end | PARTIEL | P1 | Smoke HTTP en place ; tests navigateur + réservations réelles après données/services |
+| LOC-014 En-têtes HTTP Vercel | À INVESTIGUER | P1 | Identifier cause `X-Robots-Tag` absent ; déployer fix puis tester l'en-tête réellement reçu |
 
-## Prochaine action
-Contrôler GitHub Actions du commit `1f6d0a7023e3355015e4d25bc3d57f8980173fab`. Nouveau job `smoke` sur HTTPS `locactif-ca.vercel.app`. Si échec, lire les logs du job et corriger selon erreur prouvée. Puis confirmer l'origine WordPress autorisée avant exécution de `npm run sync:catalog` et introduction d'offres réelles. Ne pas toucher au DNS ni aux réservations existantes à l'aveugle.
+## Ordre exact
+Priorité 1 : retrouver la source WordPress historique ou une sauvegarde et confirmer que les commandes/réservations sont protégées. Priorité 2 : importer des offres publiques réelles et vérifier leurs liens. Priorité 3 : fonctionnalités de réservation et identité TAKATAK conforme au contrat. Priorité 4 : domaine, QA mobile et migration contrôlée.
+
+## Accès requis
+Administrateur de l'hébergement du WordPress historique (lecture fichiers/config sans exposer les secrets), informations WordPress/Store API, puis contrat TAKATAK Auth (issuer, audience, entitlements et permissions) pour les futurs parcours authentifiés. Les API publiques testées ne répondent pas actuellement.

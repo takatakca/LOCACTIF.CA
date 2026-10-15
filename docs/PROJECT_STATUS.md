@@ -1,33 +1,32 @@
 # PROJECT_STATUS — LOCACTIF.CA
 
-Dernière vérification : 2026-10-15. **Projet fonctionnel en pré-lancement; application de réservation de bout en bout non terminée.**
+Mis à jour le 15 octobre 2026. **Socle vitrine/catalogue déployé et vérifié HTTP. Plateforme transactionnelle non terminée.**
 
-## GitHub et environnement
-- Repository : `takatakca/LOCACTIF.CA`, branche autorisée `main`.
-- Commit de référence testé avant cette relève : `2fea88d2cc9e6cfcfc3e4bda603084004ddfea62`, GitHub Actions run `38791032370` SUCCESS ; déploiement Vercel `dpl_JDqRpz9tqmJydZrcvYu97ZnzqgoC` READY.
-- Pipeline de smoke HTTP ajouté au commit `1f6d0a7023e3355015e4d25bc3d57f8980173fab` ; la suite CI doit vérifier son résultat.
-- Vercel project : `locactif-ca` (`prj_w4GSNu30m0PkDrQ0vQ74GSCY5bFj`), production GitHub `main`.
-- URL de publication : https://locactif-ca.vercel.app.
-- Nom de domaine officiel `locactif.ca` : aucune migration DNS vers Vercel réalisée.
+## État réel GitHub
+- Repo : `takatakca/LOCACTIF.CA` ; branche de publication : `main`.
+- Dernier commit technique confirmé avant cette mise à jour : `6973794c74bdcaf6e31948c95392a95132f1bb73`.
+- GitHub Actions CI `38792613374` : SUCCESS (tests de structure, JS, sécurité des liens, fichier catalogue, déploiement et vrai smoke HTTP).
+- GitHub Actions audit source `38792613363` : SUCCESS (sonde effectuée ; endpoints source en échec HTTP 403/404).
+- Vercel `locactif-ca`, projet `prj_w4GSNu30m0PkDrQ0vQ74GSCY5bFj`, déploiement `dpl_C22E37SKqHE8y1kBRGQzBMTxCdXA` READY sur exactement `6973794...`.
+- Alias public : https://locactif-ca.vercel.app. Le domaine commercial `locactif.ca` n'est pas raccordé à ce projet.
 
-## Fonctionnalités présentes
-1. Accueil responsive bilingue FR/EN.
-2. `/explore.html` : recherche, filtres, favoris **locaux seulement**, fiches liées.
-3. `/experience.html?id=ID` : fiche d'offre vérifiée à partir du catalogue, description, catégorie, prix si renseigné, favori et lien contrôlé HTTPS vers l'origine. **Pas de réservation ni de disponibilité inventée.**
-4. `site/catalog.json` : catalogue versionné, **vide pour l'instant** tant que la source réelle WordPress n'est pas vérifiée.
-5. Importeur `npm run sync:catalog` pour WooCommerce Store API depuis une origine HTTPS autorisée ; import refusé si API échoue, si le catalogue est tronqué ou si les données ne sont pas validées.
-6. `npm run verify:catalog`, tests Node.js, pipeline GitHub Actions et route statique `/health.json`.
-7. Contrôle HTTP automatisé `scripts/smoke.mjs` sur la production Vercel, inclus dans CI sur push main. Ne jamais interpréter le simple marqueur `health.json` comme preuve d'une API/backend en santé.
+## Fonctionnalités effectivement livrées
+- Accueil FR/EN responsive, navigation mobile.
+- Catalogue `/explore.html` avec recherche, filtres, favoris enregistrés **sur l'appareil**.
+- Fiches `/experience.html?id=ID` avec texte, catégories, prix importé seulement si valide, favoris et lien sortant HTTPS vers une offre d'origine. Pas de créneaux ou réservation locaux fictifs.
+- Catalogue vide `site/catalog.json` : **aucun produit réel importé** tant que WordPress n'est pas accessible.
+- Importateur WooCommerce public en lecture seule, contrôles de source/limite/intégrité, tests Node.js natifs.
+- Routage `.html` réparé en désactivant `cleanUrls` dans `vercel.json` (preuve : job smoke HTTP SUCCESS).
+- Smoke GitHub Actions : GET pages + CSS/JS/catalogue/health/robots + contrôle HTML `noindex`.
+- Audit HTTP du WordPress historique via `scripts/source-audit.mjs` sans secret.
 
-## Incomplet / dépendances externes
-- Accès réel et inventaire WordPress/WooCommerce historique (produits, extensions de booking, abonnements, commandes).
-- Offres et prix actuels, disponibilité de créneaux, règles de réservation, paiements et remboursements.
-- Authentification centralisée TAKATAK, entitlements LOCACTIF, historique de commandes, permissions et isolation tenant, messagerie, dashboards opérateurs/admin.
-- Confirmation du DNS/HTTPS officiel et plan de migration sans interruption.
-- Contrôles manuels responsive/accessibilité et réservation réelle de bout en bout.
+## Anomalies et dépendances non résolues
+1. **Source WordPress** : apex et www renvoient HTTP 403 sur l'accueil, 404 sur `/wp-json/` et WooCommerce Store API ; voir `docs/SOURCE_AUDIT.md`.
+2. **Réservations/transactions** : réservations et disponibilité, paiements, abonnements, remboursements, historiques, support, admin non réalisés.
+3. **Identité** : intégration TAKATAK Auth, entitlements, isolation par entreprise et droits côté serveur non réalisés.
+4. **Domaine** : aucune migration DNS `locactif.ca` vers Vercel ni attestation de conservation du WordPress d'origine.
+5. **Sécurité HTTP** : la réponse Vercel testée ne présente pas l'en-tête `X-Robots-Tag` configuré ; le smoke vérifie à la place les balises HTML `noindex` et `robots.txt` en `Disallow: /`. Investiguer la divergence des headers Vercel séparément.
+6. Tests navigateur manuels et achat/réservation réelle en bout de chaîne non réalisables sans données/services autorisés.
 
-## Sécurité et arbitrages
-Ne pas recréer une autorité d'identité autonome. Ne pas exposer de tokens WP ou TAKATAK. Les favoris pré-compte restent dans localStorage. Le catalogue et ses liens doivent être publics, vérifiés, sans simulation. Le site de préparation reste noindex tant que le lancement n'est pas approuvé.
-
-## Suite
-Lire `AGENTS.md` et `docs/AGENT_HANDOFF.md`, puis `docs/TASK_QUEUE.md`. Reprendre le premier blocage technique avéré avant d'envisager le raccordement de WordPress/TAKATAK et du domaine officiel.
+## Reprise
+Suivre `AGENTS.md`, `docs/AGENT_HANDOFF.md` et `docs/TASK_QUEUE.md`. Ne pas déclarer 100 % ni supprimer les contraintes de sécurité. Ne pas modifier le DNS ou l'hébergement WordPress tant que les informations historiques ne sont pas vérifiées.

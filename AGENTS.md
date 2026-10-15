@@ -1,7 +1,7 @@
 # AGENTS — LOCACTIF.CA
 
 ## Reprise obligatoire
-1. Lire `docs/AGENT_HANDOFF.md`, `docs/PROJECT_STATUS.md`, `docs/TASK_QUEUE.md`, `docs/DECISIONS.md` et `docs/DEPLOYMENT.md`.
+1. Lire `docs/SOURCE_AUDIT.md` puis `docs/AGENT_HANDOFF.md`, `docs/PROJECT_STATUS.md`, `docs/TASK_QUEUE.md`, `docs/DECISIONS.md` et `docs/DEPLOYMENT.md`.
 2. Comparer le SHA documenté avec `git rev-parse HEAD` et GitHub `main`; contrôler les commits, PR et issues avant toute écriture.
 3. Conserver les modifications des autres agents. Ne jamais forcer une branche.
 4. Exécuter `npm run check` et vérifier le workflow Actions avant de considérer une modification comme fonctionnelle.

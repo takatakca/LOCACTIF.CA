@@ -47,3 +47,11 @@ Utiliser dans Vercel le dernier déploiement marqué READY associé à un SHA co
 - Vérifie réponse HTTP 200, origine HTTPS, en-tête `X-Robots-Tag` noindex, contenu des pages `/`, `/explore.html`, `/experience.html`, fichiers JS/CSS, `/health.json` et schéma de `/catalog.json`.
 - La vérification du SHA réel reste celle du **déploiement Git Vercel** (`meta.githubCommitSha`), non de l'URL seule. Le smoke ne doit pas passer pour preuve de réservations ou paiements, qui ne sont pas implémentés.
 - Si smoke échoue, lire le journal Actions, diagnostiquer le chemin exact avant de toucher au DNS. Ne pas supprimer le smoke juste pour rendre la CI verte.
+
+## Contrôles publics réellement réussis le 2026-10-15
+- SHA produit vérifié : `6973794c74bdcaf6e31948c95392a95132f1bb73`.
+- GitHub Actions CI + smoke : run [38792613374](https://github.com/takatakca/LOCACTIF.CA/actions/runs/38792613374), SUCCESS.
+- Vercel deployment : `dpl_C22E37SKqHE8y1kBRGQzBMTxCdXA`, production READY sur ce SHA.
+- `cleanUrls=false` dans `vercel.json`. Ne **pas** réactiver `cleanUrls` sans changer tous les liens `.html`, la stratégie de dev local et les tests.
+- Le smoke a réellement relevé `X-Robots-Tag` absent en réponse ; la validation alternative des balises HTML noindex et du fichier robots a réussi. Les autres headers doivent être audités avant finalisation sécurité.
+- Sonde historique [38792613363](https://github.com/takatakca/LOCACTIF.CA/actions/runs/38792613363) : domaine apex/www DNS disponible, accueil HTTP 403, WordPress REST HTTP 404 et WooCommerce Store API HTTP 404. Ce n'est pas une source importable : voir `docs/SOURCE_AUDIT.md`.

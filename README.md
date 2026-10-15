@@ -48,3 +48,8 @@ Chaque entrée importée offre un lien interne vers `/experience.html?id=ID`, sa
 Avant de publier un catalogue : `npm run verify:catalog` (inclus dans `npm run check`). Le script d'import refuse les redirections HTTP, les données malformées et le dépassement silencieux de sa limite de 500 produits. L'exécution s'effectue depuis une origine explicitement autorisée, pas depuis l'URL d'un tiers non contrôlé.
 
 Sur `main`, GitHub Actions exécute aussi le smoke HTTPS du site Vercel : `npm run smoke -- https://locactif-ca.vercel.app`. Le résultat d'un smoke prouve les réponses HTTP publiques, pas l'exactitude de la version SHA ni le fonctionnement de paiements/réservations.
+
+## État de la source historique — vérifié le 15 octobre 2026
+Les sondes publiques exécutées sur GitHub Actions ont constaté : `locactif.ca` et `www.locactif.ca` résolvent en DNS, mais répondent HTTP 403 à la racine et HTTP 404 pour les endpoints WordPress/WooCommerce publics. **Aucun produit réel ne peut donc être importé depuis ces adresses à ce stade.** Voir [SOURCE_AUDIT.md](docs/SOURCE_AUDIT.md).
+
+Les chemins publics de la vitrine Vercel conservent les extensions `.html` (option `cleanUrls=false`). Le workflow GitHub valide maintenant ces chemins par de vrais appels HTTPS. L'alias Vercel est une **préparation** et ne remplace pas automatiquement les réservations historiques.
