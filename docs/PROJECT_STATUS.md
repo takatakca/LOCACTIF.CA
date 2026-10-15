@@ -1,33 +1,30 @@
 # PROJECT_STATUS — LOCACTIF.CA
 
-État au 2026-10-15 : **socle de préparation livré ; application métier non définie, donc non terminée**.
+Mis à jour le 2026-10-15. **Le front de découverte progresse ; le produit de réservation complet n'est pas encore terminé.**
 
-## Source de vérité
-- GitHub : `takatakca/LOCACTIF.CA` ; branche `main`.
-- Commit de départ de cette reprise : `a3d205dc90deeeed78b9382b13c39ad3268e3759`.
-- Depuis le commit initial `a6506b5`, le site FR/EN et les tests ont été ajoutés et GitHub Pages rendu facultatif.
-- Aucun PR ni issue ouverte à la reprise.
-- Dernier run initial inspecté : `38618522045`, succès le 14 octobre 2026 sur `a3d205d`.
+## Orientation et source de vérité
+- GitHub : `takatakca/LOCACTIF.CA`, `main`.
+- Des travaux antérieurs décrivent une plateforme de découverte et réservation d'activités/expériences locales (Montréal initialement), avec recherche, catégories, fiches, favoris, réservations, messagerie, espaces utilisateurs.
+- Un WordPress historique sur `locactif.ca` utilisait WooCommerce, abonnements, réservation et adhésion en 2026. Les données métier et les secrets de cette installation **ne se trouvent pas** dans ce dépôt.
+- L'écosystème TAKATAK impose l'autorité d'identité centrale, entitlements produit et permissions cloisonnées par entreprise.
 
-## Technologies
-Site statique HTML/CSS/JS en `site/`, traductions dans `site/translations.mjs`, contrôles natifs Node.js, Vercel Git sur production/main. Aucune base de données, API ou intégration de paiement.
+## Livré / contrôles
+- Page d'accueil FR/EN responsive ; page `/explore.html` interactive.
+- Recherche avec suppression d'accents, filtres de catégories, favoris enregistrés localement sur cet appareil uniquement.
+- Les résultats ne proviennent que du `catalog.json` versionné ; le fichier est actuellement vide, aucun marchand fictif.
+- Importateur WooCommerce Store API public sécurisé : `npm run sync:catalog` avec origine HTTPS validée, aucun secret requis ; redirections vers les permaliens originaux.
+- Tests Node natifs pour liens, normalisation Store API, filtrage, noindex et configuration Vercel.
+- `vercel.json` pointe vers `site/`, marqueur statique `/health.json`.
+- Cinq documents de continuité et `AGENTS.md`.
 
-## Réalisé
-- Site de préparation responsive FR/EN et navigation mobile.
-- Tests de balisage, traductions, liens et structure ; validation CI GitHub.
-- Configuration Git versionnée Vercel pour rendre `site/` racine publique et appliquer en-têtes de sécurité.
-- Marqueur statique `site/health.json` pour contrôles HTTP futurs.
-- Documentation de relève et décisions : `AGENTS.md` et `docs/{TASK_QUEUE,AGENT_HANDOFF,DEPLOYMENT,DECISIONS,PROJECT_STATUS}.md`.
+## Pipeline / infrastructure
+GitHub Actions teste chaque commit `main`. GitHub Pages est opt-in. Projet Vercel `locactif-ca` connecté à GitHub : des builds antérieurs sont READY sur SHA exact ; vérifier de nouveau la version courante avant de déclarer succès. Nom d'alias : https://locactif-ca.vercel.app. Tests HTTP depuis cet environnement indisponibles (DNS externe inaccessible) ; ne pas prétendre à une navigation fonctionnelle vérifiée.
 
-## Déploiement
-Précédent déploiement Vercel en production READY : `dpl_AAgjgd4mXSqY2bwH4uwiYWuK3DKH` pour `a3d205d`. Alias connu : https://locactif-ca.vercel.app. L'accès HTTP depuis cette session n'a pas été confirmé. Le changement de configuration dans cette itération doit être revérifié par SHA après son push.
+## En cours et blocages
+- Offres réelles WooCommerce : source, contenu et API WordPress historiques non vérifiés ; import non exécuté, catalogue public vide.
+- Réservations, profils, paiements, abonnements, disponibilité réelle, messagerie, permissions, back-office : non implémentés dans ce nouveau front.
+- Rattachement domaine officiel : non réalisé ; une installation WordPress historique impose un inventaire avant toute bascule DNS.
+- Appels de logs Vercel explicitement scoped ont retourné 403 ; métadonnées des déploiements consultables.
 
-## Incomplet / bloqué
-- Métier et fonctionnalités réelles du produit : aucune exigence validée.
-- Domaine officiel `locactif.ca` : DNS et destination non vérifiés.
-- Confirmation HTTP réelle de la version Vercel : outils web/terminal non concluants.
-- Logs Vercel ciblés : 403 quand un teamId est explicitement passé.
-- Aucune raison de créer auth, API, DB, paiement ou intégration TAKATAK avant le cahier des charges.
-
-## Prochaine action
-Consulter `docs/AGENT_HANDOFF.md` et la tâche LOC-005 dans `docs/TASK_QUEUE.md`. Corriger CI/déploiement uniquement selon des preuves, sinon recueillir les exigences métier auprès de la documentation approuvée.
+## À reprendre
+Consulter `docs/AGENT_HANDOFF.md`, `docs/TASK_QUEUE.md` et `docs/DEPLOYMENT.md`. Ne jamais maquiller le statut du site ou inventer des réservations.

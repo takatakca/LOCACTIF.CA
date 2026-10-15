@@ -47,3 +47,14 @@ test("published catalog starts with no invented merchants or availability", () =
     assert.ok(safeBookingUrl(item.url, [data.source_origin]));
   }
 });
+
+test("Explorer is reachable from the homepage and does not contain sample offers", () => {
+  const home = readFileSync(new URL("../site/index.html", import.meta.url), "utf8");
+  const explore = readFileSync(new URL("../site/explore.html", import.meta.url), "utf8");
+  assert.match(home, /href="\.\/explore\.html"/);
+  assert.ok(!home.includes("\\n        <a"), "Backslash-n must not leak into page text");
+  assert.match(explore, /data-results/);
+  assert.match(explore, /data-search-form/);
+  assert.match(explore, /data-category/);
+  assert.match(explore, /data-view="favorites"/);
+});

@@ -1,41 +1,40 @@
 # AGENT_HANDOFF — LOCACTIF.CA
 
-Date : 2026-10-15.
-Repository : `takatakca/LOCACTIF.CA` ; branche `main`.
+Révision : 2026-10-15. Branche : `main`, dépôt : `takatakca/LOCACTIF.CA`.
 
 ## Dernière tâche terminée
-LOC-003 : configuration explicite Vercel `outputDirectory=site`, marqueur `site/health.json` et tests correspondants. LOC-004 : documents de continuité et `AGENTS.md` écrits. Ces éléments doivent être confirmés par le commit `HEAD` et la CI.
+Site `/explore.html` : recherche, catégories, favoris locaux, liens de réservations d'origine contrôlés, écran vide honnête et tests du normaliseur WooCommerce. Correctifs mineurs de balisage et documentation actualisée.
 
 ## Tâche en cours
-LOC-005 : contrôle de la CI et d'un déploiement Vercel du **nouveau** SHA, avec validation HTTP si possible.
+Vérifier GitHub Actions/Vercel pour le dernier SHA et préparer l'import de véritables offres provenant du WordPress historique, sans modifier ce WordPress ni toucher au DNS.
 
-## Dernier commit confirmé à la reprise
-`a3d205dc90deeeed78b9382b13c39ad3268e3759` (production Vercel précédente). Pour la version de ce fichier, **le SHA courant réel est `git rev-parse HEAD`** après push ; ne pas inventer un SHA en anticipant le commit.
+## Commits réellement confirmés à cette relecture
+- `c9d3dfdd77f06e419713e4af8e53b29cea524ea3` : config Vercel et relève ; GitHub Actions `38775635671` SUCCESS ; Vercel `dpl_3B7QyVgwQSWfFbgSAKLrmjW9F6j7` READY.
+- `a7e4ae4f3ab429e742f31db62e939ee635a54723` : catalogue ; GitHub Actions `38776357758` SUCCESS ; Vercel `dpl_HSFNoagHMBFH7XVZnw81DevDDK6S` READY.
+- Pour les commits ultérieurs (dont cet état documentaire), déterminer le dernier SHA exact avec `git rev-parse HEAD` et GitHub main ; ne pas supposer la réussite du run futur.
 
-## Fichiers modifiés dans cette itération
-Ajoutés : `AGENTS.md`, `vercel.json`, `site/health.json`, `tests/deployment.test.mjs`, `docs/TASK_QUEUE.md`, `docs/AGENT_HANDOFF.md`, `docs/DEPLOYMENT.md`, `docs/DECISIONS.md`. Actualisé : `docs/PROJECT_STATUS.md`.
+## Fichiers affectés
+`site/index.html`, `site/translations.mjs`, `site/explore.html`, `site/explore.css`, `site/explore.js`, `site/catalog.json`, `site/catalog-utils.mjs`, `scripts/woocommerce-import.mjs`, `tests/catalog.test.mjs`, `tests/deployment.test.mjs`, `package.json`, `README.md`, `docs/DECISIONS.md`, `docs/TASK_QUEUE.md`, `docs/PROJECT_STATUS.md`, `docs/AGENT_HANDOFF.md`.
 
-## Commandes et vérifications
-- GitHub : inspection de l'arbre main, commits, branches, PR, issues, run Actions et fichiers existants.
-- Vercel : `get_project`, `list_deployments`, `list_project_domains` ; dernier état production READY sur `a3d205d`.
-- GitHub CI précédente : run `38618522045` conclu success.
-- Tentatives de lecture de fichiers/logs Vercel avec teamId : HTTP 403, accès scope insuffisant.
-- Tentatives HTTP externes depuis les outils : non vérifiables (résolution DNS indisponible).
-- Vérifications des **nouveaux fichiers** : doivent être confirmées par GitHub Actions après push ; ne pas cocher avant le résultat du run.
+## Vérifications effectuées
+- GitHub API : arbre main, README, rapports, workflows, commits/PR/issues, runs Actions ; `a7e4ae4` CI SUCCESS.
+- Vercel : projet `prj_w4GSNu30m0PkDrQ0vQ74GSCY5bFj`, liste des déploiements ; `a7e4ae4` READY.
+- Nouveau catalogue : tests unitaires ajoutés dans `tests/catalog.test.mjs`.
+- Source de produits : **aucun import exécuté** ; aucune URL publique de WordPress vérifiée.
+- HTTP réel : échec de résolution externe dans le terminal de cette session ; aucune confirmation GET `/` ou `/explore.html`.
 
-## Erreurs et accès nécessaires
-- Lire les logs Vercel ciblés peut nécessiter une reconnexion/autorisations sur le bon scope `takatakcas-projects`. Ne jamais afficher de token.
-- URL publique cible connue : https://locactif-ca.vercel.app, mais disponibilité HTTP non confirmée.
-- Les exigences de LOCACTIF et la configuration DNS officiel ne figurent pas dans le dépôt.
-- GitHub Pages échouait faute de permissions et reste volontairement opt-in.
+## Problèmes connus et accès nécessaires
+- Données et fonctionnement de l'ancien WordPress/WooCommerce : pas de connexion vérifiée depuis cette session. Origine validée nécessaire pour import.
+- Vercel API fichiers/logs explicitement scoped a retourné 403 ; utiliser connexion autorisée au bon scope, sans exposer des tokens.
+- `locactif.ca` est distinct de l'alias Vercel, aucune bascule DNS effectuée.
+- Intégration TAKATAK Auth non configurée : pas de doubles comptes ni de fausse synchronisation de favoris.
 
-## Statut de déploiement
-Vercel : version antérieure `a3d205d` READY ; nouveau commit en attente de vérification après publication. GitHub CI du dernier code à inspecter. Domaine `locactif.ca` non vérifié.
+## Statut réel du déploiement
+La version `a7e4ae4` : CI GitHub SUCCESS et Vercel READY. Le commit d'actualisation de documents en cours doit encore être vérifié. Le domaine officiel et les tests navigateur/HTTP ne sont pas confirmés.
 
 ## Prochaine action exacte
-1. Lire `AGENTS.md`, ce fichier et la file de tâches.
-2. Relever `git rev-parse HEAD` sur `main`, puis GitHub Actions pour ce SHA.
-3. Rechercher dans Vercel `locactif-ca` un déploiement production READY ayant `meta.githubCommitSha = HEAD`.
-4. Tester par HTTP `/`, `/health.json` et les actifs sous l'alias Vercel ; consigner statut HTTP et sécurité.
-5. Si l'accès Vercel 403 persiste, traiter le scope sans boucle de retries ; sinon corriger toute erreur vérifiée et refaire un commit.
-6. Si seules les exigences métier manquent, reprendre LOC-006 ; ne pas inventer le métier.
+1. Lire `AGENTS.md`, ce fichier, `docs/TASK_QUEUE.md` et `docs/DEPLOYMENT.md`.
+2. Relever le SHA actuel GitHub main, la conclusion CI et le READY Vercel sur ce même SHA.
+3. Corriger toute anomalie prouvée dans la CI ; ne pas refaire des retries identiques d'API Vercel 403.
+4. Vérifier l'installation WordPress historique et son Store API avant de définir `LOCACTIF_WP_STORE_BASE_URL`, importer uniquement de vraies offres et vérifier les permaliens.
+5. Réaliser ensuite les fiches, la réservation et l'authentification centrale TAKATAK selon les règles métier existantes.

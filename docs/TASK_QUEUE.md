@@ -1,18 +1,22 @@
 # TASK_QUEUE — LOCACTIF.CA
 
-Mis à jour le 2026-10-15. Les états ne sont pas des pourcentages arbitraires.
+Reprise au 2026-10-15. Les statuts représentent les faits démontrés, non des pourcentages.
 
-| ID | État | Priorité | Tâche | Acceptation |
-|---|---|---|---|---|
-| LOC-001 | TERMINÉ | P0 | Inspecter l'état réel du dépôt | Commit, branche, fichiers, CI et Vercel relevés |
-| LOC-002 | TERMINÉ | P0 | Site statique de préparation FR/EN | Code `site/`, navigation et tests présents |
-| LOC-003 | TERMINÉ | P0 | Fixer la racine de publication Vercel | `vercel.json` pointe vers `site/` et test associé |
-| LOC-004 | TERMINÉ | P1 | Mettre en place la relève inter-agents | Cinq documents et `AGENTS.md` créés |
-| LOC-005 | EN VÉRIFICATION | P0 | Confirmer CI et déploiement du dernier commit | Actions success + Vercel READY sur exactement le SHA poussé + réponse HTTP vérifiée |
-| LOC-006 | BLOQUÉ : SPÉCIFICATIONS ABSENTES | P0 | Définir le métier, utilisateurs et parcours du produit | Cahier des charges ou spécifications GitHub approuvés |
-| LOC-007 | BLOQUÉ : SPÉCIFICATIONS ABSENTES | P0 | Implémenter les fonctions métier de bout en bout | Tests, vrais services, validation et rôles sur besoins approuvés |
-| LOC-008 | BLOQUÉ : INFRA/APPROBATION | P1 | Associer `locactif.ca` et confirmer HTTPS | Domaine et DNS vérifiés, destination approuvée et requête réelle réussie |
-| LOC-009 | APRÈS SPÉCIFICATIONS | P1 | Décider et réaliser l'intégration TAKATAK | Décisions sur identité/entitlements/tenants, APIs réelles et isolation vérifiée |
+| ID | État | P | Tâche / critère |
+|---|---|---|---|
+| LOC-001 | TERMINÉ | P0 | Audit GitHub et Vercel réel, commits/branches/CI/PR/issues |
+| LOC-002 | TERMINÉ | P0 | Accueil responsive FR/EN et tests |
+| LOC-003 | TERMINÉ | P0 | Config Vercel versionnée (`site/`), en-têtes de sécurité, contrôles |
+| LOC-004 | TERMINÉ | P1 | Documents de relève et `AGENTS.md` |
+| LOC-005 | TERMINÉ POUR LES METADONNÉES | P0 | GitHub CI succès et Vercel READY sur le SHA publié ; HTTP non vérifié |
+| LOC-006 | TERMINÉ POUR LE FRONT | P0 | Explorer : recherche, catégories, favoris locaux, état vide honnête |
+| LOC-007 | CODE PRÊT, SOURCE NON VALIDÉE | P0 | Import WooCommerce public réel ; à exécuter sur origine approuvée ; importer/soumettre des offres vérifiées |
+| LOC-008 | NON DÉMARRÉ | P0 | Définir/réaliser fiches complètes, disponibilités réelles et réservation intégrée ou redirection contrôlée |
+| LOC-009 | BLOQUÉ PAR ACCÈS | P0 | Inventaire du WordPress historique (produits, abonnements, bookings) et plan de migration sans rupture |
+| LOC-010 | NON DÉMARRÉ | P0 | Auth TAKATAK, entitlements LOCACTIF, historique, favoris synchronisés, messages, rôles, permissions backend |
+| LOC-011 | NON DÉMARRÉ | P1 | Console opérateurs/admin et intégrations de services après règles métier approuvées |
+| LOC-012 | BLOQUÉ PAR DNS/APPROBATION | P0 | Domaine locactif.ca : vérifier WordPress actuel, DNS et continuité de réservations avant toute migration |
+| LOC-013 | PARTIEL | P1 | Tests navigateur mobile, FR/EN, import réel, tests d'intégration et vérification HTTP de production |
 
-## Reprise
-La prochaine action exécutable est LOC-005. Si la CI ou Vercel échoue, inspecter et corriger avant LOC-006. Ne pas lancer une base de données, un paiement ou une authentification sans exigence validée.
+## Prochaine action exécutable
+Confirmer le dernier run CI + READY Vercel sur `main` puis inspecter l'origine historique WordPress par un accès autorisé. Exécuter `LOCACTIF_WP_STORE_BASE_URL=... npm run sync:catalog` seulement après validation du système source, examiner les vrais produits, et committer un catalogue réel. Pas de création d'un nouveau système d'identité : TAKATAK est l'autorité.

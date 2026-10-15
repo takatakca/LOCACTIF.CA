@@ -1,19 +1,19 @@
 # DECISIONS — LOCACTIF.CA
 
-## D-001 — Ne pas inventer le produit
-**2026-10-14, conservé 2026-10-15.** Le dépôt d'origine ne comportait qu'un README de titre. Le nom « LOCACTIF » ne suffit pas à inférer l'activité, les parcours, les tarifs ou les utilisateurs. Une page de préparation explicite reste le seul contenu justifié.
+## D-001 — Activités et expériences locales (orientation retrouvée)
+**2026-10-15.** Des échanges antérieurs (mars 2026) décrivent LOCACTIF comme une plateforme mobile-first de découverte et de réservation d'activités locales, d'expériences, d'ateliers, de dégustations, de visites, d'événements et de services. Montréal était la première ville prévue. Un site WordPress avec WooCommerce, réservations, abonnements et adhésions a également été utilisé sur locactif.ca durant 2026. Le dépôt GitHub initial ne contenait aucune de ces spécifications. Ces éléments justifient une base de catalogue, **pas l'invention de vendeurs, prix ou disponibilités**.
 
-## D-002 — Site public sans collecte
-**2026-10-14.** La première itération est en HTML/CSS/JS, bilingue FR/EN, sans API ni formulaire factice, sans données client. Les traductions sont dans `site/translations.mjs`.
+## D-002 — Indépendance et données réelles
+Le présent front consomme exclusivement `site/catalog.json` ; il n'affiche ni réservation fictive ni prix synthétique. L'importateur utilise une boutique HTTPS explicitement configurée et ses produits publiés via le WooCommerce Store API. Les réservations restent sur la source d'origine jusqu'à une migration contrôlée.
 
-## D-003 — Vercel pour la version de préparation
-**2026-10-14, revérifié 2026-10-15.** Le projet Vercel `locactif-ca` est associé à GitHub `takatakca/LOCACTIF.CA`. Le déploiement de production précédent est marqué READY. La configuration du répertoire public doit être explicite dans `vercel.json`. Ne pas configurer MochaHost/Coolify sans preuve de changement d'hébergeur.
+## D-003 — Authentification future
+Le site de découverte peut être consulté en visiteur et proposer des favoris **locaux** sans compte, explicitement décrits comme non synchronisés. Les comptes, historiques, messages et droits d'achat devront être servis par l'identité centralisée TAKATAK, avec entitlements produit, jamais par un deuxième système sans autorisation.
 
-## D-004 — GitHub Pages facultatif
-**2026-10-14.** Une tentative Pages a échoué faute d'autorisation. L'action `publish` reste conditionnée à `vars.ENABLE_GITHUB_PAGES == 'true'`. Vercel est la voie existante ; ne pas configurer deux domaines concurrents.
+## D-004 — Infrastructure
+Vercel `locactif-ca` publie la nouvelle vitrine depuis `site/` via `vercel.json`; GitHub Actions teste `main`. GitHub Pages est optionnel car une tentative précédente a échoué sur les permissions. Ne pas associer `locactif.ca` à Vercel avant vérification et plan de migration : des systèmes WordPress/WooCommerce historiques peuvent dépendre de ce domaine.
 
-## D-005 — Prudence SEO et DNS
-**2026-10-15.** Conserver `noindex,nofollow` et `robots.txt` de blocage tant que le produit final n'est pas approuvé. Ne pas modifier le DNS officiel sans validation.
+## D-005 — Protection et publication
+`noindex` et `robots.txt` bloquent l'indexation prématurée ; liens de réservation validés HTTPS même origine ; pas de clés d'API côté navigateur. Aucune collecte de données de compte. Conserver ces restrictions jusqu'au lancement approuvé.
 
-## D-006 — Architecture TAKATAK
-**2026-10-15.** Si une identité est nécessaire à l'avenir, TAKATAK demeure l'autorité centrale ; chaque entreprise dispose d'un périmètre de données tenant-scoped et de droits d'accès par produit. Ce principe n'autorise pas à connecter des API non documentées.
+## D-006 — Règles de migration
+Les produits et leurs liens peuvent être lus depuis une API publique WooCommerce. **Ne pas écrire dans WooCommerce**, transférer abonnements/commandes/réservations, déplacer les DNS ou traiter des paiements sans inventaire approuvé, APIs vérifiées et trajectoire de conservation des données.
