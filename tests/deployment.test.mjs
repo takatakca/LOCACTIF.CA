@@ -11,6 +11,7 @@ test("Vercel publishes the site directory instead of repository files", () => {
   assert.equal(config.outputDirectory, "site");
   assert.equal(config.framework, null);
   assert.equal(config.version, 2);
+  assert.equal(config.cleanUrls, false, "Linked .html routes must remain publicly accessible");
   assert.ok(existsSync(resolve(root, config.outputDirectory, "index.html")));
   assert.ok(!existsSync(resolve(root, "index.html")), "Root index.html would hide a mistaken build root");
 });

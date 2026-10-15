@@ -1,0 +1,25 @@
+name: LOCACTIF - Public source audit (read-only)
+
+on:
+  push:
+    paths:
+      - scripts/source-audit.mjs
+      - .github/workflows/source-audit.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-source-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Inspect historical LOCACTIF public WordPress endpoints
+        run: node scripts/source-audit.mjs
