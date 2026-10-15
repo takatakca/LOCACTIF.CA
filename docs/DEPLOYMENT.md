@@ -39,3 +39,11 @@ Utiliser dans Vercel le dernier déploiement marqué READY associé à un SHA co
 - Import manuel : `LOCACTIF_WP_STORE_BASE_URL=https://ORIGINE_WP_APPROUVEE npm run sync:catalog`, puis revue des prix, catégories, permaliens, règles de réservation et commit du catalogue.
 - Le connecteur n'envoie pas de commandes à WooCommerce et n'effectue aucune réservation ni paiement. Les liens de fiches pointent vers leur boutique HTTPS d'origine ; préserver le WordPress existant jusqu'à un plan de migration approuvé.
 - Refaire `npm run check` avant commit. Tester en particulier recherche, catégories, favoris locaux, FR/EN, état vide, sécurité des liens, navigabilité au clavier et disposition mobile.
+
+## Smoke HTTP automatisé ajouté le 2026-10-15
+- Script : `scripts/smoke.mjs`.
+- Local : `npm run smoke -- https://locactif-ca.vercel.app`.
+- Workflow `.github/workflows/site.yml` : job `smoke` après la validation des tests, sur push main ; essais avec délai en attendant la publication Git->Vercel.
+- Vérifie réponse HTTP 200, origine HTTPS, en-tête `X-Robots-Tag` noindex, contenu des pages `/`, `/explore.html`, `/experience.html`, fichiers JS/CSS, `/health.json` et schéma de `/catalog.json`.
+- La vérification du SHA réel reste celle du **déploiement Git Vercel** (`meta.githubCommitSha`), non de l'URL seule. Le smoke ne doit pas passer pour preuve de réservations ou paiements, qui ne sont pas implémentés.
+- Si smoke échoue, lire le journal Actions, diagnostiquer le chemin exact avant de toucher au DNS. Ne pas supprimer le smoke juste pour rendre la CI verte.

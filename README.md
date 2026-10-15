@@ -41,3 +41,10 @@ Projet Vercel identifié : `locactif-ca`. Publication statique depuis `site/` vi
 
 ## Reprise par agent
 Lire `AGENTS.md`, `docs/PROJECT_STATUS.md`, `docs/TASK_QUEUE.md` et `docs/AGENT_HANDOFF.md`. Les besoins retrouvés concernent un marché local, mais le fonctionnement du futur back-office, les règles tarifaires et la migration WooCommerce -> TAKATAK doivent encore être décidés et testés.
+
+## Fiches détaillées et tests de déploiement
+Chaque entrée importée offre un lien interne vers `/experience.html?id=ID`, sans prétendre offrir une disponibilité ou un paiement sur LOCACTIF. La fiche propose le lien original vers l'organisateur, les catégories, le dernier tarif importé s'il existe et des favoris locaux.
+
+Avant de publier un catalogue : `npm run verify:catalog` (inclus dans `npm run check`). Le script d'import refuse les redirections HTTP, les données malformées et le dépassement silencieux de sa limite de 500 produits. L'exécution s'effectue depuis une origine explicitement autorisée, pas depuis l'URL d'un tiers non contrôlé.
+
+Sur `main`, GitHub Actions exécute aussi le smoke HTTPS du site Vercel : `npm run smoke -- https://locactif-ca.vercel.app`. Le résultat d'un smoke prouve les réponses HTTP publiques, pas l'exactitude de la version SHA ni le fonctionnement de paiements/réservations.

@@ -17,3 +17,9 @@ Vercel `locactif-ca` publie la nouvelle vitrine depuis `site/` via `vercel.json`
 
 ## D-006 — Règles de migration
 Les produits et leurs liens peuvent être lus depuis une API publique WooCommerce. **Ne pas écrire dans WooCommerce**, transférer abonnements/commandes/réservations, déplacer les DNS ou traiter des paiements sans inventaire approuvé, APIs vérifiées et trajectoire de conservation des données.
+
+## D-007 — Fiches produit sans disponibilité fictive
+**2026-10-15.** `experience.html?id=<id>` présente une offre uniquement si l'identifiant et le lien appartiennent à un enregistrement validé du catalogue importé. Le prix affiché est celui du dernier import et peut varier. Le bouton mène vers la page WooCommerce d'origine ; aucune étape de réservation simulée n'est intégrée.
+
+## D-008 — Vérification du site public
+**2026-10-15.** Après chaque push main, le job CI `smoke` vérifie les véritables réponses HTTPS de l'alias Vercel, au lieu de se satisfaire du statut READY. Le job vérifie les pages et assets de préparation. Il ne peut pas prouver la version SHA seul, ni les transactions absentes.

@@ -1,22 +1,22 @@
 # TASK_QUEUE — LOCACTIF.CA
 
-Reprise au 2026-10-15. Les statuts représentent les faits démontrés, non des pourcentages.
+Référence : 2026-10-15. Les critères de fin sont vérifiables, pas des pourcentages.
 
-| ID | État | P | Tâche / critère |
+| ID | État | Priorité | Prochaine tâche et critères |
 |---|---|---|---|
-| LOC-001 | TERMINÉ | P0 | Audit GitHub et Vercel réel, commits/branches/CI/PR/issues |
-| LOC-002 | TERMINÉ | P0 | Accueil responsive FR/EN et tests |
-| LOC-003 | TERMINÉ | P0 | Config Vercel versionnée (`site/`), en-têtes de sécurité, contrôles |
-| LOC-004 | TERMINÉ | P1 | Documents de relève et `AGENTS.md` |
-| LOC-005 | TERMINÉ POUR LES METADONNÉES | P0 | GitHub CI succès et Vercel READY sur le SHA publié ; HTTP non vérifié |
-| LOC-006 | TERMINÉ POUR LE FRONT | P0 | Explorer : recherche, catégories, favoris locaux, état vide honnête |
-| LOC-007 | CODE PRÊT, SOURCE NON VALIDÉE | P0 | Import WooCommerce public réel ; à exécuter sur origine approuvée ; importer/soumettre des offres vérifiées |
-| LOC-008 | NON DÉMARRÉ | P0 | Définir/réaliser fiches complètes, disponibilités réelles et réservation intégrée ou redirection contrôlée |
-| LOC-009 | BLOQUÉ PAR ACCÈS | P0 | Inventaire du WordPress historique (produits, abonnements, bookings) et plan de migration sans rupture |
-| LOC-010 | NON DÉMARRÉ | P0 | Auth TAKATAK, entitlements LOCACTIF, historique, favoris synchronisés, messages, rôles, permissions backend |
-| LOC-011 | NON DÉMARRÉ | P1 | Console opérateurs/admin et intégrations de services après règles métier approuvées |
-| LOC-012 | BLOQUÉ PAR DNS/APPROBATION | P0 | Domaine locactif.ca : vérifier WordPress actuel, DNS et continuité de réservations avant toute migration |
-| LOC-013 | PARTIEL | P1 | Tests navigateur mobile, FR/EN, import réel, tests d'intégration et vérification HTTP de production |
+| LOC-001 | TERMINÉ | P0 | Audit GitHub : commit, main, PR, issues, accès et CI |
+| LOC-002 | TERMINÉ | P0 | Accueil responsive FR/EN |
+| LOC-003 | TERMINÉ | P0 | Vercel statique : `outputDirectory=site`, headers, noindex |
+| LOC-004 | TERMINÉ | P1 | Documentation multi-agent et consignes de reprise |
+| LOC-005 | PARTIEL | P0 | Vercel READY SHA exact ; valider par HTTP et navigateur l'alias production |
+| LOC-006 | TERMINÉ | P0 | Catalogue Explorer : recherche, catégories, favoris locaux |
+| LOC-007 | EN ATTENTE DE SOURCE | P0 | Importer les **vraies** offres WooCommerce après inventaire WordPress, revue des prix et des liens, commit validé |
+| LOC-008 | PARTIEL | P0 | Fiche locale `experience.html?id=...` livrée, disponibilité/réservation restent sur la source ; construire la réservation intégrée seulement après définition métier |
+| LOC-009 | BLOQUÉ : ACCÈS | P0 | Identifier installation WordPress historique, plugins de réservation, contrats et données, vérifier Store API sans écrire dans la source |
+| LOC-010 | BLOQUÉ : CONTRAT D'API | P0 | Auth TAKATAK centrale, entitlements LOCACTIF, isolation tenant, favoris synchronisés, historiques |
+| LOC-011 | NON DÉMARRÉ | P1 | Portail opérateurs, messagerie, admin, paiements selon cahier des charges confirmé |
+| LOC-012 | BLOQUÉ : INFRA | P0 | Vérifier locactif.ca, DNS, HTTPS et préserver l'ancien commerce avant la migration |
+| LOC-013 | EN COURS | P0 | Smoke HTTP Vercel automatique, tests réels du navigateur mobile et import WooCommerce |
 
-## Prochaine action exécutable
-Confirmer le dernier run CI + READY Vercel sur `main` puis inspecter l'origine historique WordPress par un accès autorisé. Exécuter `LOCACTIF_WP_STORE_BASE_URL=... npm run sync:catalog` seulement après validation du système source, examiner les vrais produits, et committer un catalogue réel. Pas de création d'un nouveau système d'identité : TAKATAK est l'autorité.
+## Prochaine action
+Contrôler GitHub Actions du commit `1f6d0a7023e3355015e4d25bc3d57f8980173fab`. Nouveau job `smoke` sur HTTPS `locactif-ca.vercel.app`. Si échec, lire les logs du job et corriger selon erreur prouvée. Puis confirmer l'origine WordPress autorisée avant exécution de `npm run sync:catalog` et introduction d'offres réelles. Ne pas toucher au DNS ni aux réservations existantes à l'aveugle.
