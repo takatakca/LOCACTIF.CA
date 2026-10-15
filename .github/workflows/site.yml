@@ -24,6 +24,24 @@ jobs:
       - name: Validate site
         run: npm run check
 
+  smoke:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check live Vercel site via HTTPS
+        env:
+          LOCACTIF_SMOKE_BASE_URL: https://locactif-ca.vercel.app
+          LOCACTIF_SMOKE_ATTEMPTS: "8"
+        run: node scripts/smoke.mjs "$LOCACTIF_SMOKE_BASE_URL"
+
   publish:
     if: vars.ENABLE_GITHUB_PAGES == 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: validate
