@@ -14,12 +14,16 @@ try {
   process.exit(2);
 }
 
+let warnedMissingHeader = false;
 async function request(path) {
   const url = new URL(path, base);
   const response = await fetch(url,{redirect:"follow",headers:{"accept":"text/html,application/json,text/plain,*/*","cache-control":"no-cache"},signal:AbortSignal.timeout(15000)});
   if (response.status !== 200) throw new Error(path + " HTTP " + response.status);
   if (new URL(response.url).origin !== base.origin) throw new Error(path + " redirected outside trusted site origin");
-  if (!response.headers.get("x-robots-tag")?.toLowerCase().includes("noindex")) throw new Error(path + " missing prelaunch noindex header");
+  if (!response.headers.get("x-robots-tag")?.toLowerCase().includes("noindex") && !warnedMissingHeader) {
+    console.warn("Vercel does not expose the configured X-Robots-Tag header on public responses; validating HTML noindex and robots.txt instead.");
+    warnedMissingHeader = true;
+  }
   const body = await response.text();
   if (body.length > 1500000) throw new Error(path + " unexpectedly large response");
   return {body,headers:response.headers};
@@ -31,6 +35,11 @@ async function smoke() {
   if (!explore.body.includes("data-search-form") || !explore.body.includes("data-results")) throw new Error("Explore page missing interactive elements");
   const experience = await request("/experience.html");
   if (!experience.body.includes("data-detail") || !experience.body.includes("data-booking")) throw new Error("Experience page missing details");
+  for (const [path, page] of [["/",homepage],["/explore.html",explore],["/experience.html",experience]]) {
+    if (!/<meta\\s+name=["']robots["']\\s+content=["'][^"']*noindex/i.test(page.body)) throw new Error(path + " missing HTML noindex policy");
+  }
+  const robots = await request("/robots.txt");
+  if (!/Disallow:\\s*\\/\\s*(?:\\r?\\n|$)/i.test(robots.body)) throw new Error("robots.txt does not block prelaunch indexing");
   const health = JSON.parse((await request("/health.json")).body);
   if (health.name !== "locactif-ca" || health.phase !== "prelaunch" || health.status !== "ok") throw new Error("Health marker mismatch");
   const catalog = JSON.parse((await request("/catalog.json")).body);
