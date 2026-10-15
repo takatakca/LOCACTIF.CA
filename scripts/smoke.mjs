@@ -36,10 +36,10 @@ async function smoke() {
   const experience = await request("/experience.html");
   if (!experience.body.includes("data-detail") || !experience.body.includes("data-booking")) throw new Error("Experience page missing details");
   for (const [path, page] of [["/",homepage],["/explore.html",explore],["/experience.html",experience]]) {
-    if (!/<meta\\s+name=["']robots["']\\s+content=["'][^"']*noindex/i.test(page.body)) throw new Error(path + " missing HTML noindex policy");
+    if (!/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(page.body)) throw new Error(path + " missing HTML noindex policy");
   }
   const robots = await request("/robots.txt");
-  if (!/Disallow:\\s*\\/\\s*(?:\\r?\\n|$)/i.test(robots.body)) throw new Error("robots.txt does not block prelaunch indexing");
+  if (!/Disallow:\s*\/\s*(?:\r?\n|$)/i.test(robots.body)) throw new Error("robots.txt does not block prelaunch indexing");
   const health = JSON.parse((await request("/health.json")).body);
   if (health.name !== "locactif-ca" || health.phase !== "prelaunch" || health.status !== "ok") throw new Error("Health marker mismatch");
   const catalog = JSON.parse((await request("/catalog.json")).body);
