@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "node --test",
-    "check": "node --check site/app.js && node --check site/translations.mjs && npm test",
-    "sync:catalog": "node scripts/woocommerce-import.mjs"
+    "check": "node --check site/app.js && node --check site/translations.mjs && node --check site/explore.js && node --check site/experience.js && npm run verify:catalog && npm test",
+    "sync:catalog": "node scripts/woocommerce-import.mjs",
+    "verify:catalog": "node scripts/catalog-verify.mjs"
   }
 }

@@ -83,7 +83,11 @@ function card(item) {
   article.append(icon);
   const body = textEl("div", "experience-content", "");
   body.append(textEl("span", "experience-type", item.categories[0] || w.categoryFallback));
-  body.append(textEl("h3", "", item.name));
+  const heading = textEl("h3", "", "");
+  const detailLink = textEl("a", "", item.name);
+  detailLink.href = "./experience.html?id=" + encodeURIComponent(item.id);
+  heading.append(detailLink);
+  body.append(heading);
   body.append(textEl("p", "", item.description || ""));
   const bottom = textEl("div", "experience-bottom", "");
   let price = w.priceUnknown;

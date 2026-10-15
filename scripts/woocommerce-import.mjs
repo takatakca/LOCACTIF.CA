@@ -18,7 +18,7 @@ if (!providedOrigin) {
       const url = new URL("/wp-json/wc/store/v1/products", origin);
       url.searchParams.set("per_page","100");
       url.searchParams.set("page",String(page));
-      const response = await fetch(url, {signal: AbortSignal.timeout(15000),headers:{"accept":"application/json"}});
+      const response = await fetch(url, {redirect:"error",signal: AbortSignal.timeout(15000),headers:{"accept":"application/json"}});
       if (!response.ok) throw new Error("Store API returned HTTP " + response.status + " on page " + page);
       const raw = await response.json();
       if (!Array.isArray(raw)) throw new Error("Unexpected Store API response; catalogue left unchanged");
@@ -26,6 +26,7 @@ if (!providedOrigin) {
         const normalized = normalizeProduct(item, origin);
         if (normalized) records.set(normalized.id, normalized);
       }
+      if (page === 5 && raw.length === 100) throw new Error("Catalog exceeds 500 items; refusing a truncated import.");
       if (raw.length < 100) break;
     }
     const output = {
@@ -37,6 +38,9 @@ if (!providedOrigin) {
     if (output.items.length === 0 && process.env.ALLOW_EMPTY_CATALOG !== "true") {
       throw new Error("No valid published bookable products found; refusing to overwrite catalogue with an empty import. Set ALLOW_EMPTY_CATALOG=true only after confirming intended empty inventory.");
     }
+    const { validateCatalog } = await import("./catalog-verify.mjs");
+    const errors = validateCatalog(output);
+    if (errors.length) throw new Error("Catalog validation failed: " + errors.join("; "));
     const file = resolve("site/catalog.json");
     await writeFile(file, JSON.stringify(output, null, 2) + "\n");
     console.log("Imported " + output.items.length + " published WooCommerce items from " + origin);

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1923">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Consulter les détails d'une expérience locale publiée sur LOCACTIF.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>Expérience — LOCACTIF</title>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./experience.css">
+<script type="module" src="./experience.js"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Aller au contenu</a>
+<header class="header"><div class="wrap header-inner">
+<a class="logo" href="./index.html" aria-label="LOCACTIF"><span class="logo-mark" aria-hidden="true">L<span>.</span></span>LOCACTIF<span class="dot">.</span></a>
+<nav class="detail-nav" aria-label="Navigation principale">
+<a href="./index.html" data-i18n="home">Accueil</a>
+<a href="./explore.html" data-i18n="catalog">Explorer</a>
+</nav>
+<div class="language" role="group" aria-label="Choix de langue" data-language-group>
+<button type="button" data-lang="fr" aria-pressed="true" lang="fr">FR</button>
+<span aria-hidden="true">/</span>
+<button type="button" data-lang="en" aria-pressed="false" lang="en">EN</button>
+</div></div></header>
+<main id="main" class="wrap detail-main">
+<a class="detail-back" href="./explore.html"><span aria-hidden="true">←</span> <span data-i18n="back">Retour aux expériences</span></a>
+<section class="detail-state" role="status" aria-live="polite" data-state>
+<h1 data-state-title>Chargement de l'expérience…</h1>
+<p data-state-message>Consultation du catalogue.</p>
+</section>
+<article class="detail-card" data-detail hidden>
+<div class="detail-art" aria-hidden="true">L<span>.</span></div>
+<div class="detail-content">
+<p class="eyebrow"><span class="green-dot" aria-hidden="true"></span><span data-i18n="eyebrow">Expérience locale</span></p>
+<h1 data-title></h1>
+<p class="detail-category" data-categories></p>
+<p class="detail-summary" data-description></p>
+<div class="detail-price-row"><span data-i18n="priceLabel">Tarif publié</span><strong data-price></strong></div>
+<div class="detail-actions">
+<a class="button primary" data-booking target="_blank" rel="noopener noreferrer"><span data-i18n="booking">Consulter l'offre originale</span><span aria-hidden="true">↗</span></a>
+<button type="button" class="button detail-favorite" data-favorite aria-pressed="false"><span aria-hidden="true" data-heart>♡</span><span data-favorite-label>Ajouter aux favoris</span></button>
+</div>
+<p class="detail-notice" data-i18n="notice">Les prix et les disponibilités peuvent changer. Vérifiez les horaires, les conditions et la réservation sur le site de l'organisateur. Aucun paiement n'est traité ici.</p>
+</div>
+</article>
+</main>
+<footer class="footer"><div class="wrap footer-inner"><a class="footer-logo" href="./index.html">LOCACTIF<span class="dot">.</span></a><span data-i18n="footer">Des expériences près de vous.</span><span>© <span data-year>2026</span> LOCACTIF</span></div></footer>
+</body></html>
