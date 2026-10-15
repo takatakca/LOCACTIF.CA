@@ -11,7 +11,7 @@ Vérifier GitHub Actions/Vercel pour le dernier SHA et préparer l'import de vé
 ## Commits réellement confirmés à cette relecture
 - `c9d3dfdd77f06e419713e4af8e53b29cea524ea3` : config Vercel et relève ; GitHub Actions `38775635671` SUCCESS ; Vercel `dpl_3B7QyVgwQSWfFbgSAKLrmjW9F6j7` READY.
 - `a7e4ae4f3ab429e742f31db62e939ee635a54723` : catalogue ; GitHub Actions `38776357758` SUCCESS ; Vercel `dpl_HSFNoagHMBFH7XVZnw81DevDDK6S` READY.
-- Pour les commits ultérieurs (dont cet état documentaire), déterminer le dernier SHA exact avec `git rev-parse HEAD` et GitHub main ; ne pas supposer la réussite du run futur.
+- \`865054558389399b669cf3c7bc28e7d146967b30\` : documentation et corrections ; GitHub Actions \`38776757460\` SUCCESS ; Vercel \`dpl_F2amWpkMJ9Ndaotsg9xVu6RxDBc8\` READY.\n- Pour les commits ultérieurs (dont cet état documentaire), déterminer le dernier SHA exact avec `git rev-parse HEAD` et GitHub main ; ne pas supposer la réussite du run futur.
 
 ## Fichiers affectés
 `site/index.html`, `site/translations.mjs`, `site/explore.html`, `site/explore.css`, `site/explore.js`, `site/catalog.json`, `site/catalog-utils.mjs`, `scripts/woocommerce-import.mjs`, `tests/catalog.test.mjs`, `tests/deployment.test.mjs`, `package.json`, `README.md`, `docs/DECISIONS.md`, `docs/TASK_QUEUE.md`, `docs/PROJECT_STATUS.md`, `docs/AGENT_HANDOFF.md`.

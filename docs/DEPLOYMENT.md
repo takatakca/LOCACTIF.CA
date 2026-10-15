@@ -32,3 +32,10 @@ Le site est statique, sans compilation. `vercel.json` fixe `outputDirectory` à 
 
 ## Rollback
 Utiliser dans Vercel le dernier déploiement marqué READY associé à un SHA connu, seulement en cas d'incident identifié. Ne pas effectuer de force-push et ne pas utiliser le rollback pour masquer des tests en échec.
+
+## Catalogue d'activités (ajout 2026-10-15)
+- Pages à vérifier : `/explore.html`, `/explore.css`, `/explore.js`, `/catalog-utils.mjs`, `/catalog.json`, ainsi que `/` et `/health.json`.
+- `site/catalog.json` est volontairement vide tant qu'aucune offre WooCommerce réelle n'a été vérifiée. Ce n'est ni une panne ni une preuve de disponibilité de produits.
+- Import manuel : `LOCACTIF_WP_STORE_BASE_URL=https://ORIGINE_WP_APPROUVEE npm run sync:catalog`, puis revue des prix, catégories, permaliens, règles de réservation et commit du catalogue.
+- Le connecteur n'envoie pas de commandes à WooCommerce et n'effectue aucune réservation ni paiement. Les liens de fiches pointent vers leur boutique HTTPS d'origine ; préserver le WordPress existant jusqu'à un plan de migration approuvé.
+- Refaire `npm run check` avant commit. Tester en particulier recherche, catégories, favoris locaux, FR/EN, état vide, sécurité des liens, navigabilité au clavier et disposition mobile.
