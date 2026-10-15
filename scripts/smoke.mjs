@@ -55,6 +55,17 @@ async function smoke() {
   console.log("LIVE HTTP smoke checks passed for " + base.origin + " (catalog items: " + catalog.items.length + ")");
 }
 
+async function diagnoseRoutes() {
+  console.error("PUBLIC ROUTE DIAGNOSTICS (status, location)");
+  for (const path of ["/","/explore","/explore.html","/experience","/experience.html","/site/explore.html","/site/experience.html","/catalog.json","/site/catalog.json","/robots.txt"]) {
+    try {
+      const response = await fetch(new URL(path,base), {method:"GET",redirect:"manual",signal:AbortSignal.timeout(7500)});
+      console.error(path + " => " + response.status + " " + (response.headers.get("location") || ""));
+      await response.body?.cancel();
+    } catch (error) {console.error(path + " => ERROR " + error.message);}
+  }
+}
+
 const retries = Number(process.env.LOCACTIF_SMOKE_ATTEMPTS || 6);
 const maxAttempts = Number.isSafeInteger(retries) && retries >= 1 && retries <= 12 ? retries : 6;
 for (let attempt=1; attempt<=maxAttempts; attempt++) {
@@ -63,7 +74,10 @@ for (let attempt=1; attempt<=maxAttempts; attempt++) {
     process.exit(0);
   } catch (error) {
     console.error("Smoke attempt " + attempt + "/" + maxAttempts + " failed: " + error.message);
-    if (attempt === maxAttempts) process.exitCode = 1;
+    if (attempt === maxAttempts) {
+      await diagnoseRoutes();
+      process.exitCode = 1;
+    }
     else await new Promise((resolve)=>setTimeout(resolve,10000));
   }
 }
