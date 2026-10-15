@@ -11,14 +11,16 @@ Vérifier GitHub Actions/Vercel pour le dernier SHA et préparer l'import de vé
 ## Commits réellement confirmés à cette relecture
 - `c9d3dfdd77f06e419713e4af8e53b29cea524ea3` : config Vercel et relève ; GitHub Actions `38775635671` SUCCESS ; Vercel `dpl_3B7QyVgwQSWfFbgSAKLrmjW9F6j7` READY.
 - `a7e4ae4f3ab429e742f31db62e939ee635a54723` : catalogue ; GitHub Actions `38776357758` SUCCESS ; Vercel `dpl_HSFNoagHMBFH7XVZnw81DevDDK6S` READY.
-- \`865054558389399b669cf3c7bc28e7d146967b30\` : documentation et corrections ; GitHub Actions \`38776757460\` SUCCESS ; Vercel \`dpl_F2amWpkMJ9Ndaotsg9xVu6RxDBc8\` READY.\n- Pour les commits ultérieurs (dont cet état documentaire), déterminer le dernier SHA exact avec `git rev-parse HEAD` et GitHub main ; ne pas supposer la réussite du run futur.
+- `865054558389399b669cf3c7bc28e7d146967b30` : documentation et corrections ; GitHub Actions `38776757460` SUCCESS ; Vercel `dpl_F2amWpkMJ9Ndaotsg9xVu6RxDBc8` READY.
+- `00c01168d4d3acc1ef069083ae44c653fc6a3e63` : positionnement des activités ; GitHub Actions `38777041254` SUCCESS ; Vercel `dpl_9awyHLqDSD3YECuNKW4iyEwhBBKd` READY.
+- Pour les commits ultérieurs (dont cet état documentaire), déterminer le dernier SHA exact avec `git rev-parse HEAD` et GitHub main ; ne pas supposer la réussite du run futur.
 
 ## Fichiers affectés
 `site/index.html`, `site/translations.mjs`, `site/explore.html`, `site/explore.css`, `site/explore.js`, `site/catalog.json`, `site/catalog-utils.mjs`, `scripts/woocommerce-import.mjs`, `tests/catalog.test.mjs`, `tests/deployment.test.mjs`, `package.json`, `README.md`, `docs/DECISIONS.md`, `docs/TASK_QUEUE.md`, `docs/PROJECT_STATUS.md`, `docs/AGENT_HANDOFF.md`.
 
 ## Vérifications effectuées
-- GitHub API : arbre main, README, rapports, workflows, commits/PR/issues, runs Actions ; `a7e4ae4` CI SUCCESS.
-- Vercel : projet `prj_w4GSNu30m0PkDrQ0vQ74GSCY5bFj`, liste des déploiements ; `a7e4ae4` READY.
+- GitHub API : arbre main, README, rapports, workflows, commits/PR/issues, runs Actions ; `00c0116` CI SUCCESS.
+- Vercel : projet `prj_w4GSNu30m0PkDrQ0vQ74GSCY5bFj`, liste des déploiements ; `00c0116` READY.
 - Nouveau catalogue : tests unitaires ajoutés dans `tests/catalog.test.mjs`.
 - Source de produits : **aucun import exécuté** ; aucune URL publique de WordPress vérifiée.
 - HTTP réel : échec de résolution externe dans le terminal de cette session ; aucune confirmation GET `/` ou `/explore.html`.
@@ -30,7 +32,7 @@ Vérifier GitHub Actions/Vercel pour le dernier SHA et préparer l'import de vé
 - Intégration TAKATAK Auth non configurée : pas de doubles comptes ni de fausse synchronisation de favoris.
 
 ## Statut réel du déploiement
-La version `a7e4ae4` : CI GitHub SUCCESS et Vercel READY. Le commit d'actualisation de documents en cours doit encore être vérifié. Le domaine officiel et les tests navigateur/HTTP ne sont pas confirmés.
+Dernier commit de produit validé avant cette correction documentaire : `00c01168d4d3acc1ef069083ae44c653fc6a3e63` ; GitHub Actions `38777041254` SUCCESS et déploiement Vercel `dpl_9awyHLqDSD3YECuNKW4iyEwhBBKd` READY en production. Le SHA précis de cette correction documentaire se lit dans GitHub `main`. Le domaine officiel et les tests navigateur/HTTP ne sont pas confirmés.
 
 ## Prochaine action exacte
 1. Lire `AGENTS.md`, ce fichier, `docs/TASK_QUEUE.md` et `docs/DEPLOYMENT.md`.
