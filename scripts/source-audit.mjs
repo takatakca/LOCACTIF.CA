@@ -1,10 +1,10 @@
 import { lookup } from "node:dns/promises";
 
 const allowedHosts = new Set(["locactif.ca","www.locactif.ca"]);
-const origin = "https://locactif.ca";
+const origins = ["https://locactif.ca", "https://www.locactif.ca"];
 const timeout = 12000;
 
-async function request(path) {
+async function request(path, origin) {
   let current = new URL(path,origin);
   for (let i=0;i<4;i++) {
     if (current.protocol !== "https:" || !allowedHosts.has(current.hostname) || current.username || current.password) {
@@ -37,36 +37,40 @@ async function request(path) {
 }
 
 console.log("LOCACTIF HISTORICAL SOURCE AUDIT — read-only HTTPS GET; no auth, no writes");
-try {
-  const addresses = await lookup("locactif.ca",{all:true});
-  console.log("DNS locactif.ca:", addresses.length ? "resolves ("+addresses.length+" records)" : "no records");
-} catch(error) {
-  console.log("DNS locactif.ca: unavailable ("+error.code+")");
-}
-for (const [label,path] of [
-  ["homepage","/"],
-  ["wp-json index","/wp-json/"],
-  ["WooCommerce Store API sample","/wp-json/wc/store/v1/products?per_page=1"]
-]) {
+for (const origin of origins) {
+  const domain = new URL(origin).hostname;
+  console.log("SOURCE:",origin);
   try {
-    const r=await request(path);
-    console.log(label+": HTTP "+r.status+" at "+r.url+" ("+r.contentType+")");
-    if(label==="homepage") {
-      const html=r.body.toLowerCase();
-      console.log("WordPress markup fingerprint:", html.includes("/wp-content/")||html.includes("wp-json") ? "detected" : "not detected");
-    } else if (r.status===200 && r.contentType.includes("json")) {
-      try {
-        const data=JSON.parse(r.body);
-        if(label==="wp-json index"){
-          const routes=Object.keys(data.routes||{});
-          console.log("WP REST index:", data.namespaces ? "namespaces present" : "unrecognized format", "| WooCommerce Store API route:",routes.some(x=>x.includes("/wc/store/")) ? "listed" : "not listed");
-        } else {
-          console.log("Public Store API:", Array.isArray(data) ? "array of "+data.length+" sample item(s) (NOT full inventory)" : "not a product array");
-        }
-      } catch(error){console.log("JSON parse error:",error.message);}
-    }
+    const addresses=await lookup(domain,{all:true});
+    console.log("DNS:",addresses.length ? "resolves ("+addresses.length+" records)" : "no records");
   } catch(error) {
-    console.log(label+": unavailable — "+error.message);
+    console.log("DNS: unavailable ("+error.code+")");
+  }
+  for (const [label,path] of [
+    ["homepage","/"],
+    ["wp-json index","/wp-json/"],
+    ["WooCommerce Store API sample","/wp-json/wc/store/v1/products?per_page=1"]
+  ]) {
+    try {
+      const r=await request(path,origin);
+      console.log(label+": HTTP "+r.status+" at "+r.url+" ("+r.contentType+")");
+      if(label==="homepage") {
+        const html=r.body.toLowerCase();
+        console.log("WordPress markup fingerprint:",html.includes("/wp-content/")||html.includes("wp-json") ? "detected" : "not detected");
+      } else if(r.status===200 && r.contentType.includes("json")) {
+        try {
+          const data=JSON.parse(r.body);
+          if(label==="wp-json index"){
+            const routes=Object.keys(data.routes||{});
+            console.log("WP REST index:",data.namespaces ? "namespaces present" : "unrecognized format","| WooCommerce Store API route:",routes.some(x=>x.includes("/wc/store/")) ? "listed" : "not listed");
+          } else {
+            console.log("Public Store API:",Array.isArray(data) ? "array of "+data.length+" sample item(s) (NOT full inventory)" : "not a product array");
+          }
+        } catch(error){console.log("JSON parse error:",error.message);}
+      }
+    } catch(error) {
+      console.log(label+": unavailable — "+error.message);
+    }
   }
 }
 console.log("Audit finished. This read-only probe does NOT establish ownership, booking integrity, or permission to migrate customer data.");
