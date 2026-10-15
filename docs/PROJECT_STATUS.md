@@ -1,37 +1,33 @@
-# Reprise agent — LOCACTIF.CA (2026-10-14)
+# PROJECT_STATUS — LOCACTIF.CA
 
-## Inventaire initial vérifié
-- Repository : takatakca/LOCACTIF.CA, branche main.
-- Dernier commit initial : a6506b5264768b43332d811b8abc146825c83dcc.
-- Seul fichier : README.md avec le titre « LOCACTIF.CA ».
-- Aucune autre branche, PR ouverte, issue ouverte, exécution GitHub Actions ou spécification produit dans ce dépôt.
+État au 2026-10-15 : **socle de préparation livré ; application métier non définie, donc non terminée**.
 
-## Livré dans cette première itération
-- Site statique FR/EN responsive et identité visuelle de départ.
-- Navigation mobile et clavier, traduction centralisée.
-- Zéro backend, zéro donnée personnelle collectée, zéro dépendance de production.
-- Contrôles Node natifs, CI GitHub, déploiement Vercel prêt.
-- Robots noindex tant que le métier et les pages réelles ne sont pas validés.
+## Source de vérité
+- GitHub : `takatakca/LOCACTIF.CA` ; branche `main`.
+- Commit de départ de cette reprise : `a3d205dc90deeeed78b9382b13c39ad3268e3759`.
+- Depuis le commit initial `a6506b5`, le site FR/EN et les tests ont été ajoutés et GitHub Pages rendu facultatif.
+- Aucun PR ni issue ouverte à la reprise.
+- Dernier run initial inspecté : `38618522045`, succès le 14 octobre 2026 sur `a3d205d`.
 
-## Ce qui n'est PAS terminé
-- But du service, utilisateurs, règles métier, contenu et design définitif non spécifiés.
-- Auth, base de données, API, intégrations, paiement et administrations : ni requis ni implémentés à ce stade.
-- Vercel : déploiement production de la page de préparation READY, domaine Vercel attribué et protection SSO désactivée.
-- GitHub Pages : refusé par permissions du GITHUB_TOKEN. Publication Pages désactivée par défaut, activable via ENABLE_GITHUB_PAGES=true après configuration des Pages.
-- Domaine officiel locactif.ca : DNS et HTTPS non vérifiés ; aucun domaine personnalisé relié.
+## Technologies
+Site statique HTML/CSS/JS en `site/`, traductions dans `site/translations.mjs`, contrôles natifs Node.js, Vercel Git sur production/main. Aucune base de données, API ou intégration de paiement.
 
-## Prochaine relève
-1. Lire README, état GitHub et présent journal avant de coder.
-2. Obtenir/identifier le cahier des charges réel. Ne pas inventer le métier en fonction du nom.
-3. Construire par fonctionnalités verticales avec tests et rôles définis.
-4. Si services partagés GROUPE TAKATAK : identité unique, entitlements explicites, données isolées par tenant.
-5. Vérifier les validations GitHub et Vercel ; ne relier locactif.ca qu'après vérification de DNS et du produit final.
-6. Conserver la navigation et l'identité LOCACTIF distinctes des autres applications.
+## Réalisé
+- Site de préparation responsive FR/EN et navigation mobile.
+- Tests de balisage, traductions, liens et structure ; validation CI GitHub.
+- Configuration Git versionnée Vercel pour rendre `site/` racine publique et appliquer en-têtes de sécurité.
+- Marqueur statique `site/health.json` pour contrôles HTTP futurs.
+- Documentation de relève et décisions : `AGENTS.md` et `docs/{TASK_QUEUE,AGENT_HANDOFF,DEPLOYMENT,DECISIONS,PROJECT_STATUS}.md`.
 
-## Déploiement de la première version (2026-10-14)
-- Vercel project : locactif-ca (prj_w4GSNu30m0PkDrQ0vQ74GSCY5bFj).
-- Deployment : dpl_EExk5iyevJLRycM9YDode9gnB2YU.
-- Commit GitHub ciblé : f8809fe209b733990c13b42be2f2f729428928df.
-- Statut API : READY ; alias : https://locactif-ca.vercel.app.
-- GitHub CI : vérifications réussies ; déploiement Pages échoué faute d'autorisation de créer le site Pages.
-- Ne pas confondre READY côté hébergeur et test navigateur de bout en bout, non réalisé.
+## Déploiement
+Précédent déploiement Vercel en production READY : `dpl_AAgjgd4mXSqY2bwH4uwiYWuK3DKH` pour `a3d205d`. Alias connu : https://locactif-ca.vercel.app. L'accès HTTP depuis cette session n'a pas été confirmé. Le changement de configuration dans cette itération doit être revérifié par SHA après son push.
+
+## Incomplet / bloqué
+- Métier et fonctionnalités réelles du produit : aucune exigence validée.
+- Domaine officiel `locactif.ca` : DNS et destination non vérifiés.
+- Confirmation HTTP réelle de la version Vercel : outils web/terminal non concluants.
+- Logs Vercel ciblés : 403 quand un teamId est explicitement passé.
+- Aucune raison de créer auth, API, DB, paiement ou intégration TAKATAK avant le cahier des charges.
+
+## Prochaine action
+Consulter `docs/AGENT_HANDOFF.md` et la tâche LOC-005 dans `docs/TASK_QUEUE.md`. Corriger CI/déploiement uniquement selon des preuves, sinon recueillir les exigences métier auprès de la documentation approuvée.
