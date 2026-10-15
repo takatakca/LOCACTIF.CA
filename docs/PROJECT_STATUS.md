@@ -30,3 +30,6 @@ Mis à jour le 15 octobre 2026. **Socle vitrine/catalogue déployé et vérifié
 
 ## Reprise
 Suivre `AGENTS.md`, `docs/AGENT_HANDOFF.md` et `docs/TASK_QUEUE.md`. Ne pas déclarer 100 % ni supprimer les contraintes de sécurité. Ne pas modifier le DNS ou l'hébergement WordPress tant que les informations historiques ne sont pas vérifiées.
+
+## Signal externe de continuité
+Des messages de surveillance datés du 5 au 8 octobre 2026 démontrent une installation WordPress avec WooCommerce/Wordfence et modules de réservation/abonnement encore signalée récemment. Cela ne contredit pas les réponses 403/404 observées le 15 octobre : l'origine peut être indisponible ou filtrée. Un avis de renouvellement du domaine mentionne le **3 novembre 2026** ; vérifier son état chez le registraire sans afficher d'identifiants ni entreprendre de facturation.

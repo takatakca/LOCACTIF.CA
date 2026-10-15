@@ -41,3 +41,8 @@ Le site de préparation est déployé sur l'alias https://locactif-ca.vercel.app
 3. Inspecter l'hébergement de `locactif.ca` et les sauvegardes/chemins WordPress depuis un accès autorisé : expliquer HTTP 403/404, identifier l'API Store et ses vraies offres. Ne pas réécrire le DNS.
 4. Si l'API devient accessible, exécuter `npm run sync:catalog` avec l'origine de confiance, contrôler le catalogue et ses liens puis committer les offres.
 5. Réaliser ensuite booking et TAKATAK Auth selon les exigences démontrées ; corriger les en-têtes Vercel en maintenant la CI smoke.
+
+## Information additionnelle du 2026-10-15
+- Les derniers messages historiques disponibles indiquent une activité WordPress/Wordfence sur locactif.ca début octobre 2026, malgré les tests publics en HTTP 403/404 du 15 octobre. Ne pas supposer que WordPress a été supprimé ni que ses commandes peuvent être ignorées.
+- Avis de renouvellement du domaine pour le **2026-11-03** : vérifier le renouvellement auprès du registraire (pas d'action financière déléguée).
+- Le commit documentaire antérieur `3b300de930f0616a43e85a3dce1bef327d4ee7ff` a été vérifié GitHub CI SUCCESS (run `38792949651`) et Vercel READY (déploiement `dpl_DtBsi4ZbtntmrY413xPwjEzB9cMj`). Lire le head de `main` pour identifier le SHA exact de cette mise à jour supplémentaire.

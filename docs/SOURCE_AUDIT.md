@@ -28,3 +28,8 @@ Workflow GitHub : `LOCACTIF - Public source audit (read-only)` → `Run workflow
 
 ## Limites
 Cet audit n'identifie pas le propriétaire DNS, le fournisseur d'hébergement, la configuration PHP, le panneau WordPress, le contenu des commandes, les extensions Booking ou le contrat API TAKATAK. Ces informations nécessitent un accès d'administration explicitement autorisé et approprié.
+
+## Corroboration chronologique (messages de surveillance, pas accès au serveur)
+- Des notifications Wordfence et WooCommerce reçues entre le 5 et le 8 octobre 2026 identifiaient encore `locactif.ca` comme site WordPress avec extensions liées à WooCommerce, réservations YITH et abonnements. C'est une preuve **historique**, pas une preuve de fonctionnement le 15 octobre.
+- Un avis de renouvellement reçu le 5 octobre 2026 indique pour `locactif.ca` une échéance **2026-11-03**. Vérifier le statut d'enregistrement/auto-renouvellement chez le registraire avant cette date ; ne pas tenter de renouveler sans procédure autorisée.
+- Aucune preuve d'un docroot, hôte SSH, sauvegarde exploitable, compte de commerce actif ou API accessible n'est fournie par ces messages. Aucun identifiant ni secret ne doit être ajouté au dépôt.

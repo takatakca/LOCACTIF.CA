@@ -19,6 +19,8 @@
 | LOC-013 QA end-to-end | PARTIEL | P1 | Smoke HTTP en place ; tests navigateur + réservations réelles après données/services |
 | LOC-014 En-têtes HTTP Vercel | À INVESTIGUER | P1 | Identifier cause `X-Robots-Tag` absent ; déployer fix puis tester l'en-tête réellement reçu |
 
+| LOC-015 Renouvellement du domaine | À VÉRIFIER | P0 | Avis de renouvellement : 2026-11-03 ; confirmer le statut auprès du registraire pour éviter une rupture de service |
+
 ## Ordre exact
 Priorité 1 : retrouver la source WordPress historique ou une sauvegarde et confirmer que les commandes/réservations sont protégées. Priorité 2 : importer des offres publiques réelles et vérifier leurs liens. Priorité 3 : fonctionnalités de réservation et identité TAKATAK conforme au contrat. Priorité 4 : domaine, QA mobile et migration contrôlée.
 
