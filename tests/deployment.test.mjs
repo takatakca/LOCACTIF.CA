@@ -60,3 +60,14 @@ test("explicit Vercel response-header rules for the three public HTML entrypoint
     assert.match(map["x-robots-tag"],/noindex/);
   }
 });
+
+
+test("actual Vercel site-root config mirrors static project safety policy", () => {
+  const nested=JSON.parse(readFileSync(resolve(root,"site/vercel.json"),"utf8"));
+  assert.equal(nested.cleanUrls,false);
+  assert.deepEqual(nested.headers,config.headers,"Project root and static root security policies must match");
+  const global=nested.headers.find(x=>x.source==="/(.*)");
+  const h=Object.fromEntries(global.headers.map(({key,value})=>[key.toLowerCase(),value]));
+  assert.match(h["content-security-policy"],/frame-ancestors 'none'/);
+  assert.match(h["content-security-policy"],/object-src 'none'/);
+});

@@ -14,31 +14,46 @@ try {
   process.exit(2);
 }
 
-let warnedMissingHeader = false;
 async function request(path) {
   const url = new URL(path, base);
   const response = await fetch(url,{redirect:"follow",headers:{"accept":"text/html,application/json,text/plain,*/*","cache-control":"no-cache"},signal:AbortSignal.timeout(15000)});
   if (response.status !== 200) throw new Error(path + " HTTP " + response.status);
   if (new URL(response.url).origin !== base.origin) throw new Error(path + " redirected outside trusted site origin");
-  if (!response.headers.get("x-robots-tag")?.toLowerCase().includes("noindex") && !warnedMissingHeader) {
-    console.warn("Vercel does not expose the configured X-Robots-Tag header on public responses; validating HTML noindex and robots.txt instead.");
-    warnedMissingHeader = true;
-  }
   const body = await response.text();
   if (body.length > 1500000) throw new Error(path + " unexpectedly large response");
   return {body,headers:response.headers};
 }
+function verifySecurityHeaders(path, headers) {
+  const expected = {
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "permissions-policy": "geolocation=()"
+  };
+  for (const [key, value] of Object.entries(expected)) {
+    if (!headers.get(key)?.includes(value)) throw new Error(path + " missing/mismatched security header: " + key);
+  }
+  if (!headers.get("x-robots-tag")?.includes("noindex")) throw new Error(path + " missing X-Robots-Tag noindex");
+  const csp=headers.get("content-security-policy") || "";
+  for(const directive of ["default-src 'self'","object-src 'none'","frame-ancestors 'none'","base-uri 'self'"]) {
+    if(!csp.includes(directive)) throw new Error(path + " missing CSP directive: "+directive);
+  }
+}
 async function smoke() {
   const homepage = await request("/");
-  const securityHeaders = ["x-robots-tag","x-content-type-options","x-frame-options","referrer-policy","permissions-policy","content-security-policy","x-locactif-config"];
+  const securityHeaders = ["x-robots-tag","x-content-type-options","x-frame-options","referrer-policy","permissions-policy","content-security-policy"];
   const observed = Object.fromEntries(securityHeaders.map(key=>[key,homepage.headers.get(key)]));
   console.log("LIVE RESPONSE SECURITY HEADERS (public homepage): " + JSON.stringify(observed));
 
   if (!homepage.body.includes("LOCACTIF") || !homepage.body.includes("explore.html")) throw new Error("Homepage has missing brand or catalog link");
   const explore = await request("/explore.html");
   if (!explore.body.includes("data-search-form") || !explore.body.includes("data-results")) throw new Error("Explore page missing interactive elements");
+  for (const [path, response] of [["/", homepage],["/explore.html",explore]]) {
+    verifySecurityHeaders(path, response.headers);
+  }
   const experience = await request("/experience.html");
   if (!experience.body.includes("data-detail") || !experience.body.includes("data-booking")) throw new Error("Experience page missing details");
+  verifySecurityHeaders("/experience.html",experience.headers);
   for (const [path, page] of [["/",homepage],["/explore.html",explore],["/experience.html",experience]]) {
     if (!/<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(page.body)) throw new Error(path + " missing HTML noindex policy");
   }
