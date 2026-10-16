@@ -1,48 +1,38 @@
 # PROJECT_STATUS — LOCACTIF.CA
 
-Mis à jour le 15 octobre 2026. **Socle vitrine/catalogue déployé et vérifié HTTP. Plateforme transactionnelle non terminée.**
+Dernière inspection : 16 octobre 2026. **Socle statique de découverte publié, testé, sécurisé ; produit de réservation et intégration TAKATAK non terminés.**
 
-## État réel GitHub
-- Repo : `takatakca/LOCACTIF.CA` ; branche de publication : `main`.
-- Dernier commit technique confirmé avant cette mise à jour : `6973794c74bdcaf6e31948c95392a95132f1bb73`.
-- GitHub Actions CI `38792613374` : SUCCESS (tests de structure, JS, sécurité des liens, fichier catalogue, déploiement et vrai smoke HTTP).
-- GitHub Actions audit source `38792613363` : SUCCESS (sonde effectuée ; endpoints source en échec HTTP 403/404).
-- Vercel `locactif-ca`, projet `prj_w4GSNu30m0PkDrQ0vQ74GSCY5bFj`, déploiement `dpl_C22E37SKqHE8y1kBRGQzBMTxCdXA` READY sur exactement `6973794...`.
-- Alias public : https://locactif-ca.vercel.app. Le domaine commercial `locactif.ca` n'est pas raccordé à ce projet.
+## Source de vérité et état vérifié
 
-## Fonctionnalités effectivement livrées
-- Accueil FR/EN responsive, navigation mobile.
-- Catalogue `/explore.html` avec recherche, filtres, favoris enregistrés **sur l'appareil**.
-- Fiches `/experience.html?id=ID` avec texte, catégories, prix importé seulement si valide, favoris et lien sortant HTTPS vers une offre d'origine. Pas de créneaux ou réservation locaux fictifs.
-- Catalogue vide `site/catalog.json` : **aucun produit réel importé** tant que WordPress n'est pas accessible.
-- Importateur WooCommerce public en lecture seule, contrôles de source/limite/intégrité, tests Node.js natifs.
-- Routage `.html` réparé en désactivant `cleanUrls` dans `vercel.json` (preuve : job smoke HTTP SUCCESS).
-- Smoke GitHub Actions : GET pages + CSS/JS/catalogue/health/robots + contrôle HTML `noindex`.
-- Audit HTTP du WordPress historique via `scripts/source-audit.mjs` sans secret.
+- GitHub : `takatakca/LOCACTIF.CA` ; branche de publication `main`; aucune PR ou issue ouverte à la reprise.
+- Dernier **commit technique confirmé** avant cette mise à jour : `59864e54d624a25737867c73d5d7088eb3be9e70`. GitHub Actions run `38942915068` : **SUCCESS** (tests + smoke HTTP).
+- Vercel projet `locactif-ca`, `prj_w4GSNu30m0PkDrQ0vQ74GSCY5bFj` ; déploiement `dpl_4R23MsvrZ71gDMWxVhgJczJQHXcV` READY sur le SHA `59864e5...`.
+- Alias Vercel : https://locactif-ca.vercel.app. Le domaine commercial `locactif.ca` n'est **pas** associé à ce déploiement ; ne pas remplacer le site historique aveuglément.
+- Pour tout commit ultérieur (documentation comprise), **recontrôler** `main`, GitHub Actions et `meta.githubCommitSha` Vercel.
 
-## Anomalies et dépendances non résolues
-1. **Source WordPress** : apex et www renvoient HTTP 403 sur l'accueil, 404 sur `/wp-json/` et WooCommerce Store API ; voir `docs/SOURCE_AUDIT.md`.
-2. **Réservations/transactions** : réservations et disponibilité, paiements, abonnements, remboursements, historiques, support, admin non réalisés.
-3. **Identité** : intégration TAKATAK Auth, entitlements, isolation par entreprise et droits côté serveur non réalisés.
-4. **Domaine** : aucune migration DNS `locactif.ca` vers Vercel ni attestation de conservation du WordPress d'origine.
-5. **Sécurité HTTP** : la réponse Vercel testée ne présente pas l'en-tête `X-Robots-Tag` configuré ; le smoke vérifie à la place les balises HTML `noindex` et `robots.txt` en `Disallow: /`. Investiguer la divergence des headers Vercel séparément.
-6. Tests navigateur manuels et achat/réservation réelle en bout de chaîne non réalisables sans données/services autorisés.
+## Fonctionnel
 
-## Reprise
-Suivre `AGENTS.md`, `docs/AGENT_HANDOFF.md` et `docs/TASK_QUEUE.md`. Ne pas déclarer 100 % ni supprimer les contraintes de sécurité. Ne pas modifier le DNS ou l'hébergement WordPress tant que les informations historiques ne sont pas vérifiées.
+- Accueil et navigation FR/EN responsive ; explorer avec recherche, catégories, favoris locaux et conservation de filtres ; fiches de présentation avec prix importé seulement si réel et horodatage.
+- `site/catalog.json` reste **vide volontairement**. Pas d'expériences fictives ou de créneaux simulés.
+- Contrôle partagé du schéma du catalogue entre importateur, tests CI et navigateur.
+- `npm run inspect:catalog` en lecture seule ; `npm run sync:catalog` sous approbation de catégories, uniquement après découverte du WordPress autorisé.
+- **Nouveau le 16 octobre :** revue des changements de catalogue dans `scripts/catalog-publish.mjs`, refus des suppressions massives ou du changement d'origine ; écriture atomique en fichier temporaire suivie d'un renommage. Test vérifiant qu'une erreur d'E/S ne tronque pas `catalog.json`.
+- CI `npm run check` et tests HTTP réels des pages, headers de sécurité, CSS, modules JS, catalogue, robots et indicateur statique de santé.
+- Politique CSP, `X-Robots-Tag`, `nosniff` et protection iframe vérifiées sur la racine Vercel active `site/vercel.json`.
 
-## Signal externe de continuité
-Des messages de surveillance datés du 5 au 8 octobre 2026 démontrent une installation WordPress avec WooCommerce/Wordfence et modules de réservation/abonnement encore signalée récemment. Cela ne contredit pas les réponses 403/404 observées le 15 octobre : l'origine peut être indisponible ou filtrée. Un avis de renouvellement du domaine mentionne le **3 novembre 2026** ; vérifier son état chez le registraire sans afficher d'identifiants ni entreprendre de facturation.
+## Nouveau constat sur l'ancien WordPress (audit 16 octobre)
 
-## Livraison supplémentaire du 15 octobre 2026 — durcissement de l'import
-- Référence contrôlée avant documentation : commit `411940cc1dc625e62244945ac98afdef72d992af`, CI `38844284219` SUCCESS avec smoke HTTP réel, Vercel `dpl_9KDnrMEAYmUdLToWaXvaJ3YJ46Kt` READY.
-- Importateur WooCommerce revu : inspection préalable de catégories via `npm run inspect:catalog`, catégories strictement autorisées pour `npm run sync:catalog`, exclusion des produits hors stock, échec fermé sur réponse erronée, redirection, doublons, dépassement de 500 et inventaire décroissant de plus de 50 % non approuvé.
-- Nouveau `site/catalog-schema.mjs` réutilisé par le navigateur et le programme de validation. Les fiches affichent la date exacte du dernier import seulement lorsqu'elle existe ; navigation recherche/catégorie conservée jusqu'à la fiche et au retour.
-- Tests unitaires supplémentaires pour API WooCommerce simulée localement (jamais affichée comme données réelles) et contrôles des liens.
-- **Ne pas confondre ces validations avec une réservation fonctionnelle :** source `locactif.ca` toujours inaccessible en HTTP pour WordPress REST, aucune offre publiée, aucun TAKATAK Auth, aucune prise de paiement.
+- `locactif.ca` et `www.locactif.ca` : DNS A `209.42.24.127` ; NS `ns1`–`ns4.mysecurecloudhost.com` ; serveur Apache.
+- Accueil HTTP **403** ; `index.php` et `wp-login.php` HTTP **404** ; API REST/WooCommerce HTTP **404** ; variante REST HTTP **403**.
+- Source et commandes non confirmées : aucun import WordPress possible depuis ces URLs actuellement.
+- Lire `docs/WORDPRESS_RECOVERY.md` et `docs/SOURCE_AUDIT.md` ; ne pas modifier DNS, les réservations, abonnements ni les fichiers du serveur sans inventaire.
+- Renouvellement du domaine : avis mentionnant le **3 novembre 2026**, statut du registraire non vérifié.
 
-## Sécurité HTTP consolidée (2026-10-15/16)
-- Ancien écart `X-Robots-Tag` absent : **résolu**, non plus une anomalie active. Cause vérifiée : le projet Vercel lit `site/vercel.json` comme fichier de configuration.
-- Commit de code vérifié `f868b7f31bac2b28c82f207eac42216161c8d9a9` : GitHub Actions CI `38844937710` SUCCESS (validation + HTTP smoke), en-têtes réellement observés sur la production, dont `Content-Security-Policy` avec `frame-ancestors 'none'`.
-- Les protections HTTP sont vérifiées pour les trois pages HTML principales. Les fichiers `vercel.json` (racine Git) et `site/vercel.json` (racine effective de Vercel) sont harmonisés et testés.
-- Ce succès n'affecte pas les blocages métier : catalogue WooCommerce historique indisponible, réservations, paiements, TAKATAK Auth, permissions et domaine commercial non migrés.
+## Blocages majeurs
+
+1. WordPress réel/document root, sauvegardes, inventaire d'expériences publiées et règles de réservation.
+2. TAKATAK Auth centrale, entitlements du produit, isolation entreprise/tenant vérifiée côté serveur ; aucun contrat d'API validé.
+3. Disponibilités réelles, réservations, commandes, paiements, abonnements, remboursements, opérateurs et administration non réalisés.
+4. Bascule contrôlée de `locactif.ca`, QA navigateur mobile et transactions end-to-end.
+
+Le site statique est **pré-lancement** et reste `noindex`. Le statut Vercel READY et la CI verte ne prouvent pas l'achèvement du produit métier.

@@ -74,3 +74,11 @@ Le système de vérification n'interroge jamais de commandes clients WooCommerce
 Le projet Vercel utilise le sous-dossier `site/` comme racine active. Par conséquent **`site/vercel.json` est la configuration effectivement appliquée**, tandis que `vercel.json` dans le dépôt garde une configuration équivalente pour les déploiements depuis la racine. Les règles de sécurité des deux fichiers sont testées pour empêcher toute divergence.
 
 Depuis le commit `f868b7f`, le smoke CI vérifie directement sur HTTPS les en-têtes `X-Robots-Tag`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` et la CSP stricte (`frame-ancestors 'none'`). Les tests sont **réellement passés** sur l'alias de production. Toute disparition des en-têtes fait échouer le pipeline.
+
+## Protection des catalogues et récupération de l'hébergement (16 octobre 2026)
+
+L'import `npm run sync:catalog` refuse de remplacer un inventaire existant devenu invalide, non vérifié ou trop réduit. Son écriture est désormais **atomique** : un échec de fichier ne doit pas tronquer le catalogue publié. Les tests simulent ces pannes sans employer de vraies fiches clients.
+
+Le contrôle HTTP GitHub Actions vérifie aussi les modules `.mjs` chargés par les pages (schéma et fonctions de catalogue), pour détecter les erreurs de publication invisibles dans un simple test de page HTML.
+
+L'audit public de `locactif.ca` constate l'IP `209.42.24.127`, les nameservers `mysecurecloudhost.com` et un serveur Apache qui répond 403/404 sur les points d'entrée historiques WordPress. Voir [WORDPRESS_RECOVERY.md](docs/WORDPRESS_RECOVERY.md) pour l'inventaire non destructif à effectuer depuis le compte d'hébergement autorisé, **avant** toute modification du DNS ou des réservations.

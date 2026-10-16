@@ -12,7 +12,7 @@
 | LOC-006 Catalogue Explorer | TERMINÉ côté front | P0 | Recherche/filtres/favoris locaux |
 | LOC-007 Importer offres WooCommerce réelles | OUTIL PRÊT, SOURCE BLOQUÉE | P0 | Inspection publique sans écriture, catégories approuvées, import contrôlé ; source WooCommerce valide et catalogue réel encore requis |
 | LOC-008 Fiches et réservation | PARTIEL | P0 | Fiche/renvoi HTTPS livrés ; slots, commande et paiement non opérationnels |
-| LOC-009 Source WordPress historique | BLOQUÉ HTTP 403/404 | P0 | Localiser origin/WordPress/DB/extensions ou confirmer migration/abandon, voir SOURCE_AUDIT.md |
+| LOC-009 Source WordPress historique | BLOQUÉ, DIAGNOSTIC APPROFONDI | P0 | DNS A 209.42.24.127, Apache 403/404 ; identifier docroot et sauvegardes, voir WORDPRESS_RECOVERY.md |
 | LOC-010 TAKATAK Auth & permissions | BLOQUÉ CONTRAT API | P0 | SSO autorisé, entitlements produit, isolation tenant démontrés côté serveur |
 | LOC-011 Admin opérateurs, paiements, support | NON DÉMARRÉ | P1 | Modèles, API et fonctionnalités selon exigences approuvées |
 | LOC-012 Domaine locactif.ca | BLOQUÉ | P0 | Inventaire WordPress, DNS/HTTPS validés et bascule sans interruption |
@@ -20,7 +20,11 @@
 | LOC-014 En-têtes HTTP Vercel | TERMINÉ | P1 | Config active déplacée dans `site/vercel.json`, CSP stricte, tests HTTP confirmés |
 | LOC-015 Renouvellement du domaine | À VÉRIFIER | P0 | Avis de renouvellement : 2026-11-03 ; confirmer le statut auprès du registraire pour éviter une rupture de service |
 
-| LOC-016 Intégrité et navigation du catalogue | TERMINÉ | P1 | Schéma commun serveur/navigateur, retour aux filtres et affichage date d'import testés |
+| LOC-016 Intégrité et navigation du catalogue | TERMINÉ | P1 | Schéma commun serveur/navigateur, filtres et date d'import |
+
+| LOC-017 Écriture atomique du catalogue | TERMINÉ | P0 | Tests de panne disque, refus des réductions de catalogue et mise à jour atomique ; CI validée |
+| LOC-018 Diagnostic du WordPress historique | TERMINÉ POUR L'AUDIT PUBLIC | P0 | NS, IP, Apache, index.php, wp-login, Store API constatés ; suite demande accès hébergement |
+| LOC-019 Smoke des modules JS publics | TERMINÉ | P1 | CI vérifie catalog-schema, catalog-utils, translations et assets en HTTPS |
 
 ## Ordre exact
 Priorité 1 : retrouver la source WordPress historique ou une sauvegarde et confirmer que les commandes/réservations sont protégées. Priorité 2 : importer des offres publiques réelles et vérifier leurs liens. Priorité 3 : fonctionnalités de réservation et identité TAKATAK conforme au contrat. Priorité 4 : domaine, QA mobile et migration contrôlée.

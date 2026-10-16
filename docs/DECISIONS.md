@@ -46,3 +46,12 @@ La recherche et la catégorie sont transportées dans le lien de la fiche et du 
 **2026-10-15/16.** Les premières mesures HTTP montraient **tous** les en-têtes personnalisés absents malgré leur déclaration dans `vercel.json` à la racine. Une configuration parallèle dans `site/vercel.json` a fait apparaître les en-têtes en production, prouvant que le projet Vercel existant lit ce dossier comme racine effective. Le diagnostic temporaire `X-Locactif-Config` a ensuite été retiré.
 
 La politique définitive ajoute `Content-Security-Policy` incluant `frame-ancestors 'none'`, qui doit être envoyée comme **en-tête** (une balise meta n'offre pas cette protection). Les réponses publiques `/`, `/explore.html` et `/experience.html` doivent porter les mêmes protections. La CI vérifie désormais les en-têtes réellement reçus, en plus des balises noindex et de `robots.txt`.
+
+## D-016 — Écriture atomique du catalogue WooCommerce
+**2026-10-16.** Après une inspection de source approuvée, le catalogue importé est vérifié avec le schéma commun. L'ancien catalogue est lu et validé ; l'agent exige une revue explicite de l'origine et d'une réduction de plus de 50 %. La nouvelle version est écrite dans un fichier temporaire du même répertoire puis renommée atomiquement vers `site/catalog.json`. Une erreur d'écriture/renommage ne doit pas détruire le fichier historique ; tests de régression dans `tests/catalog-publish.test.mjs`. Aucune écriture dans WordPress.
+
+## D-017 — Diagnostiquer avant de restaurer WordPress
+**2026-10-16.** Les deux noms apex/www partagent l'IP publique `209.42.24.127` et les NS `mysecurecloudhost.com`. Apache retourne 403 à la racine et 404 sur `index.php`, `wp-login.php` et Store API ; le problème est compatible avec un docroot ou des fichiers absents mais ne confirme pas la disparition des données. L'agent n'édite ni `.htaccess`, ni DNS, ni DB ni sauvegarde sans constater les chemins et les commandes actives. Procédure dans `docs/WORDPRESS_RECOVERY.md`.
+
+## D-018 — Smoke des dépendances JavaScript réellement livrées
+**2026-10-16.** Le job HTTPS public vérifie aussi les modules `catalog-schema.mjs`, `catalog-utils.mjs` et `translations.mjs`, ainsi que favicon et styles des pages d'erreur : la simple présence des pages HTML n'est pas une preuve que le navigateur peut charger les imports.

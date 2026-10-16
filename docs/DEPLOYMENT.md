@@ -77,3 +77,12 @@ Les réponses publiques de Vercel ne comportaient pas l'en-tête `X-Robots-Tag` 
 - Ne pas supprimer les tests d'en-têtes pour rendre une publication artificiellement verte. Une erreur indique un changement de racine Vercel, une régression du fichier de configuration ou une divergence HTTP à expliquer.
 
 La mention antérieure d'en-têtes absents correspond à **l'état avant correction** ; la politique vérifiée à partir du commit indiqué ci-dessus la remplace.
+
+## Mise à jour vérifiée du 16 octobre 2026
+
+- Projet Vercel et branche inchangés : `locactif-ca` / `main`. La racine Vercel active reste `site/` ; ne pas perdre `site/vercel.json`.
+- Commit fonctionnel `59864e54d624a25737867c73d5d7088eb3be9e70` : GitHub Actions CI/smoke run `38942915068` `completed/success` ; Vercel `dpl_4R23MsvrZ71gDMWxVhgJczJQHXcV` READY sur exactement le même SHA.
+- `scripts/smoke.mjs` contrôle dorénavant les dépendances JS chargées par le navigateur : `/catalog-utils.mjs`, `/catalog-schema.mjs`, `/translations.mjs`, ainsi que les feuilles de style et le favicon.
+- Nouvel import sûr : `scripts/catalog-publish.mjs` et tests de restauration après erreur. Le catalogue est écrit atomiquement dans `site/catalog.json` ; l'ancien catalogue doit être présent, valide et protégé des écrasements dangereux.
+- Audit historique indépendant `38942774369` (source `f04ef4f`) : DNS `209.42.24.127`, NS `ns1`–`ns4.mysecurecloudhost.com`, Apache, 403 racine, 404 fichiers WordPress. Voir `docs/WORDPRESS_RECOVERY.md`.
+- Ne jamais assimiler le `health.json` statique à une preuve de fonctionnement du système WordPress ou TAKATAK.

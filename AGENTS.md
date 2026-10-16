@@ -1,7 +1,7 @@
 # AGENTS — LOCACTIF.CA
 
 ## Reprise obligatoire
-1. Lire `docs/SOURCE_AUDIT.md` puis `docs/AGENT_HANDOFF.md`, `docs/PROJECT_STATUS.md`, `docs/TASK_QUEUE.md`, `docs/DECISIONS.md` et `docs/DEPLOYMENT.md`.
+1. Lire `docs/WORDPRESS_RECOVERY.md` et `docs/SOURCE_AUDIT.md` puis `docs/AGENT_HANDOFF.md`, `docs/PROJECT_STATUS.md`, `docs/TASK_QUEUE.md`, `docs/DECISIONS.md` et `docs/DEPLOYMENT.md`.
 2. Comparer le SHA documenté avec `git rev-parse HEAD` et GitHub `main`; contrôler les commits, PR et issues avant toute écriture.
 3. Conserver les modifications des autres agents. Ne jamais forcer une branche.
 4. Exécuter `npm run check` et vérifier le workflow Actions avant de considérer une modification comme fonctionnelle.
@@ -11,7 +11,7 @@
 - Le service actuellement implémenté est un front statique FR/EN de découverte d'expériences locales (accueil, explorer, fiche, favoris locaux) sans base de données, paiement ou système d'authentification. Le catalogue est vide tant que la source WordPress/WooCommerce historique n'est pas vérifiée.
 - Code publié : `site/`. Test/CI : Node.js, sans dépendance tierce. L'hébergement Git est lié à Vercel (`locactif-ca`).
 - Configuration Vercel versionnée dans `vercel.json` avec `outputDirectory: site`, **mais** le projet Vercel lié a sa racine active dans `site/` : c'est `site/vercel.json` qui contrôle effectivement les headers publics. Garder les deux politiques identiques (test automatique).
-- Catalogue vérifié via `npm run verify:catalog` ; CI teste `npm run check` et le site HTTP réel sur l'alias Vercel via `scripts/smoke.mjs`.
+- Catalogue importé par remplacement atomique et revue de pertes via `scripts/catalog-publish.mjs` ; catalogue vérifié via `npm run verify:catalog` ; CI teste `npm run check` et le site HTTP réel sur l'alias Vercel via `scripts/smoke.mjs`.
 - GitHub Pages est optionnel, désactivé si `ENABLE_GITHUB_PAGES` n'est pas `true`.
 
 ## Contraintes
