@@ -1,4 +1,4 @@
-import { safeBookingUrl } from "./catalog-utils.mjs";
+import { safeBookingUrl, explorerReturnHref } from "./catalog-utils.mjs";
 import { validateCatalog } from "./catalog-schema.mjs";
 
 const find = (selector) => document.querySelector(selector);
@@ -34,7 +34,9 @@ try {
   const stored = JSON.parse(localStorage.getItem(storageKey) || "[]");
   if (Array.isArray(stored)) favorites = stored.filter((value) => typeof value === "string").slice(0,500);
 } catch { /* Favorites are optional. */ }
-const desiredId = new URLSearchParams(location.search).get("id");
+const currentParams = new URLSearchParams(location.search);
+const desiredId = currentParams.get("id");
+find("[data-back-link]").href = explorerReturnHref(currentParams);
 
 function setState(kind) {
   status = kind;

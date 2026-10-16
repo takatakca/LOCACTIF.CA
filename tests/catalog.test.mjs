@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { filterCatalog, normalizeProduct, safeBookingUrl } from "../site/catalog-utils.mjs";
+import { filterCatalog, normalizeProduct, safeBookingUrl, experienceHref, explorerReturnHref } from "../site/catalog-utils.mjs";
 
 test("accepts only HTTPS booking links from a configured trusted origin", () => {
   assert.equal(safeBookingUrl("https://locactif.ca/book/1", ["https://locactif.ca"]), "https://locactif.ca/book/1");
@@ -68,4 +68,19 @@ test("does not create deceptive price when WooCommerce currency exponent is inva
   },"https://locactif.ca");
   assert.equal(bad.price,null);
   assert.equal(bad.currency,"CAD");
+});
+
+
+test("deep-linked category survives to detail view and back without unsafe parameters", () => {
+  const href=experienceHref("17","café Montréal","Ateliers");
+  const u=new URL(href,"https://locactif-ca.vercel.app/");
+  assert.equal(u.searchParams.get("id"),"17");
+  assert.equal(u.searchParams.get("q"),"café Montréal");
+  assert.equal(u.searchParams.get("category"),"Ateliers");
+  const back=explorerReturnHref(u.searchParams);
+  assert.equal(new URL(back,"https://locactif-ca.vercel.app/").searchParams.get("category"),"Ateliers");
+  const noExtra=explorerReturnHref(new URLSearchParams("id=5&admin=true&access_token=leak"));
+  assert.equal(noExtra,"./explore.html");
+  const explorer=readFileSync(new URL("../site/explore.js",import.meta.url),"utf8");
+  assert.match(explorer,/category && valid\.length && !categories\.includes\(category\)/);
 });

@@ -50,3 +50,22 @@ export function filterCatalog(items, {search = "", category = "", favorites = []
     (!q || normalize([item.name, item.description, ...item.categories].join(" ")).includes(q))
   );
 }
+
+
+// Preserve discovery filters when opening a card and returning to results.
+export function experienceHref(id, search = "", category = "") {
+  const params = new URLSearchParams({id:String(id)});
+  if (String(search).trim()) params.set("q",String(search).trim().slice(0,120));
+  if (String(category).trim()) params.set("category",String(category).trim().slice(0,50));
+  return "./experience.html?" + params.toString();
+}
+
+export function explorerReturnHref(params) {
+  const safe = new URLSearchParams();
+  const q = params.get("q");
+  const category = params.get("category");
+  if (q?.trim()) safe.set("q",q.trim().slice(0,120));
+  if (category?.trim()) safe.set("category",category.trim().slice(0,50));
+  const query=safe.toString();
+  return "./explore.html" + (query ? "?" + query : "");
+}

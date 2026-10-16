@@ -1,4 +1,4 @@
-import { filterCatalog, safeBookingUrl } from "./catalog-utils.mjs";
+import { filterCatalog, safeBookingUrl, experienceHref } from "./catalog-utils.mjs";
 import { validateCatalog } from "./catalog-schema.mjs";
 
 const $ = (selector) => document.querySelector(selector);
@@ -86,7 +86,7 @@ function card(item) {
   body.append(textEl("span", "experience-type", item.categories[0] || w.categoryFallback));
   const heading = textEl("h3", "", "");
   const detailLink = textEl("a", "", item.name);
-  detailLink.href = "./experience.html?id=" + encodeURIComponent(item.id);
+  detailLink.href = experienceHref(item.id, searchInput.value, category);
   heading.append(detailLink);
   body.append(heading);
   body.append(textEl("p", "", item.description || ""));
@@ -121,7 +121,7 @@ function render() {
   const w = words[locale];
   const valid = items.filter((item) => item && typeof item.id === "string" && typeof item.name === "string" && Array.isArray(item.categories) && safeBookingUrl(item.url, sourceOrigin ? [sourceOrigin] : []));
   const categories = [...new Set(valid.flatMap((item) => item.categories))].sort((a,b) => a.localeCompare(b,locale));
-  if (category && !categories.includes(category)) category = "";
+  if (category && valid.length && !categories.includes(category)) category = "";
   const select = $("[data-category]");
   select.replaceChildren(textEl("option", "", w.allCategories));
   select.firstChild.value = "";
