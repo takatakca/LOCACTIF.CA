@@ -22,8 +22,10 @@ export function normalizeProduct(product, trustedOrigin) {
     ? product.short_description.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim().slice(0, 300)
     : "";
   const price = product.prices;
-  const amount = price && typeof price.price === "string" && /^\d+$/.test(price.price)
-    ? Number(price.price) / 10 ** Number(price.currency_minor_unit ?? 2)
+  const unit = Number(price?.currency_minor_unit ?? 2);
+  const amount = price && typeof price.price === "string" && /^\d{1,15}$/.test(price.price) &&
+    Number.isInteger(unit) && unit >= 0 && unit <= 6
+    ? Number(price.price) / 10 ** unit
     : null;
   const currency = price && typeof price.currency_code === "string" && /^[A-Z]{3}$/.test(price.currency_code)
     ? price.currency_code : null;

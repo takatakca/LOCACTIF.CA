@@ -58,3 +58,14 @@ test("Explorer is reachable from the homepage and does not contain sample offers
   assert.match(explore, /data-category/);
   assert.match(explore, /data-view="favorites"/);
 });
+
+
+test("does not create deceptive price when WooCommerce currency exponent is invalid", () => {
+  const bad = normalizeProduct({
+    id: 7, name:"Cours", permalink:"https://locactif.ca/cours",
+    categories:[{name:"Ateliers"}],
+    prices:{price:"1000",currency_code:"CAD",currency_minor_unit:1000000}
+  },"https://locactif.ca");
+  assert.equal(bad.price,null);
+  assert.equal(bad.currency,"CAD");
+});
