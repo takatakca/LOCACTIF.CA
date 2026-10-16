@@ -30,7 +30,7 @@ async function request(path) {
 }
 async function smoke() {
   const homepage = await request("/");
-  const securityHeaders = ["x-robots-tag","x-content-type-options","x-frame-options","referrer-policy","permissions-policy","content-security-policy"];
+  const securityHeaders = ["x-robots-tag","x-content-type-options","x-frame-options","referrer-policy","permissions-policy","content-security-policy","x-locactif-config"];
   const observed = Object.fromEntries(securityHeaders.map(key=>[key,homepage.headers.get(key)]));
   console.log("LIVE RESPONSE SECURITY HEADERS (public homepage): " + JSON.stringify(observed));
 

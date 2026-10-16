@@ -48,3 +48,15 @@ test("deployment and handoff documentation exists", () => {
     assert.ok(existsSync(resolve(root, path)), path + " must exist");
   }
 });
+
+
+test("explicit Vercel response-header rules for the three public HTML entrypoints", () => {
+  for(const source of ["/","/explore.html","/experience.html"]) {
+    const rule=config.headers.find(x=>x.source===source);
+    assert.ok(rule,"Missing explicit header rule for "+source);
+    const map=Object.fromEntries(rule.headers.map(({key,value})=>[key.toLowerCase(),value]));
+    assert.equal(map["x-content-type-options"],"nosniff");
+    assert.equal(map["x-frame-options"],"DENY");
+    assert.match(map["x-robots-tag"],/noindex/);
+  }
+});
