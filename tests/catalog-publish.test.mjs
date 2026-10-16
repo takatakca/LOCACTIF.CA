@@ -7,7 +7,7 @@ import { reviewCatalogUpdate, publishCatalogAtomically } from "../scripts/catalo
 
 const item = id=>({id:String(id),name:"Test",description:"Fixture uniquement",categories:["Essai"],url:"https://locactif.ca/item/"+id,price:null,currency:null});
 const catalog=(ids,origin="https://locactif.ca")=>({
-  schema_version:1,source_origin:origin,imported_at:ids.length?"2026-10-15T12:00:00.000Z":null,items:ids.map(item)
+  schema_version:1,source_origin:origin,imported_at:ids.length?"2026-10-15T12:00:00.000Z":null,items:ids.map(id=>({...item(id),url:origin+"/item/"+id}))
 });
 
 test("declines unknown origin and major catalogue losses unless explicitly approved",()=>{
