@@ -1,4 +1,5 @@
 import { filterCatalog, safeBookingUrl } from "./catalog-utils.mjs";
+import { validateCatalog } from "./catalog-schema.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const words = {
@@ -154,10 +155,10 @@ try {
   const response = await fetch("./catalog.json", {cache:"no-store"});
   if (!response.ok) throw new Error("Catalog fetch failed");
   const catalog = await response.json();
-  if (!catalog || !Array.isArray(catalog.items) || typeof catalog.source_origin !== "string") throw new Error("Invalid catalog");
+  const errors = validateCatalog(catalog);
+  if (errors.length) throw new Error("Invalid catalog");
   sourceOrigin = new URL(catalog.source_origin).origin;
-  if (!sourceOrigin.startsWith("https://")) throw new Error("Catalog source must be HTTPS");
-  items = catalog.items.slice(0, 500);
+  items = catalog.items;
 } catch {
   error = true;
 }

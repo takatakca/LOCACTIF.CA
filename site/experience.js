@@ -1,4 +1,5 @@
 import { safeBookingUrl } from "./catalog-utils.mjs";
+import { validateCatalog } from "./catalog-schema.mjs";
 
 const find = (selector) => document.querySelector(selector);
 const copy = {
@@ -106,10 +107,8 @@ if (!desiredId || !/^[1-9][0-9]{0,15}$/.test(desiredId)) {
     const response = await fetch("./catalog.json",{cache:"no-store"});
     if (!response.ok) throw new Error("HTTP " + response.status);
     const catalog = await response.json();
-    if (!catalog || catalog.schema_version !== 1 || !Array.isArray(catalog.items) ||
-        typeof catalog.source_origin !== "string") throw new Error("Invalid catalog");
+    if (validateCatalog(catalog).length) throw new Error("Invalid catalog");
     const origin = new URL(catalog.source_origin);
-    if (origin.protocol !== "https:" || origin.username || origin.password || origin.pathname !== "/") throw new Error("Invalid source");
     const match = catalog.items.find((product) => product && product.id === desiredId);
     if (!match) {
       setState("missing");
