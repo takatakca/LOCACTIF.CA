@@ -30,6 +30,10 @@ async function request(path) {
 }
 async function smoke() {
   const homepage = await request("/");
+  const securityHeaders = ["x-robots-tag","x-content-type-options","x-frame-options","referrer-policy","permissions-policy","content-security-policy"];
+  const observed = Object.fromEntries(securityHeaders.map(key=>[key,homepage.headers.get(key)]));
+  console.log("LIVE RESPONSE SECURITY HEADERS (public homepage): " + JSON.stringify(observed));
+
   if (!homepage.body.includes("LOCACTIF") || !homepage.body.includes("explore.html")) throw new Error("Homepage has missing brand or catalog link");
   const explore = await request("/explore.html");
   if (!explore.body.includes("data-search-form") || !explore.body.includes("data-results")) throw new Error("Explore page missing interactive elements");
