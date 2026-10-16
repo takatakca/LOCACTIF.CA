@@ -65,8 +65,11 @@ async function smoke() {
   const errors = validateCatalog(catalog);
   if (errors.length) throw new Error("Invalid public catalog: " + errors.join("; "));
   for (const [path,token] of [
-    ["/app.js","setLanguage"],["/explore.js","filterCatalog"],["/experience.js","safeBookingUrl"],
-    ["/styles.css","--lime"],["/explore.css",".catalog-hero"],["/experience.css",".detail-main"]
+    ["/app.js","setLanguage"],["/translations.mjs","export const translations"],
+    ["/explore.js","filterCatalog"],["/experience.js","safeBookingUrl"],
+    ["/catalog-utils.mjs","safeBookingUrl"],["/catalog-schema.mjs","validateCatalog"],
+    ["/styles.css","--lime"],["/explore.css",".catalog-hero"],["/experience.css",".detail-main"],
+    ["/404.css","place-items:center"],["/favicon.svg","<svg"]
   ]) {
     const asset = await request(path);
     if (!asset.body.includes(token)) throw new Error(path + " content mismatch");
