@@ -10,7 +10,7 @@
 ## Architecture confirmée
 - Le service actuellement implémenté est un front statique FR/EN de découverte d'expériences locales (accueil, explorer, fiche, favoris locaux) sans base de données, paiement ou système d'authentification. Le catalogue est vide tant que la source WordPress/WooCommerce historique n'est pas vérifiée.
 - Code publié : `site/`. Test/CI : Node.js, sans dépendance tierce. L'hébergement Git est lié à Vercel (`locactif-ca`).
-- Configuration Vercel versionnée dans `vercel.json` avec `outputDirectory: site`.
+- Configuration Vercel versionnée dans `vercel.json` avec `outputDirectory: site`, **mais** le projet Vercel lié a sa racine active dans `site/` : c'est `site/vercel.json` qui contrôle effectivement les headers publics. Garder les deux politiques identiques (test automatique).
 - Catalogue vérifié via `npm run verify:catalog` ; CI teste `npm run check` et le site HTTP réel sur l'alias Vercel via `scripts/smoke.mjs`.
 - GitHub Pages est optionnel, désactivé si `ENABLE_GITHUB_PAGES` n'est pas `true`.
 

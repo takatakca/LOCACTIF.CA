@@ -41,3 +41,8 @@ Un import public se termine sans écriture en cas d'erreur d'API, de JSON, de re
 
 ## D-014 — Rechercher puis consulter sans perdre l'état
 La recherche et la catégorie sont transportées dans le lien de la fiche et du retour, sans informations sensibles ; un lien direct avec catégorie conserve le filtre au premier chargement. Les pages montrent la date d'import seulement si elle est réellement enregistrée.
+
+## D-015 — Configuration Vercel active dans site/
+**2026-10-15/16.** Les premières mesures HTTP montraient **tous** les en-têtes personnalisés absents malgré leur déclaration dans `vercel.json` à la racine. Une configuration parallèle dans `site/vercel.json` a fait apparaître les en-têtes en production, prouvant que le projet Vercel existant lit ce dossier comme racine effective. Le diagnostic temporaire `X-Locactif-Config` a ensuite été retiré.
+
+La politique définitive ajoute `Content-Security-Policy` incluant `frame-ancestors 'none'`, qui doit être envoyée comme **en-tête** (une balise meta n'offre pas cette protection). Les réponses publiques `/`, `/explore.html` et `/experience.html` doivent porter les mêmes protections. La CI vérifie désormais les en-têtes réellement reçus, en plus des balises noindex et de `robots.txt`.

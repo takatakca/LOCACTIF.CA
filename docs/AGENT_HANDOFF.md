@@ -46,3 +46,11 @@ LOC-009 / LOC-007 : retrouver l'origine WordPress historique et son inventaire W
 4. Une fois les catégories confirmées, importer le catalogue avec protections, vérifier les prix/URLs/conditions de réservation puis committer et publier.
 5. Ensuite implémenter TAKATAK SSO + entitlements vérifiés côté serveur, commandes/réservations et droits des opérateurs, en utilisant un contrat API approuvé ; ne pas bricoler de connexion fictive.
 6. Réinvestiguer séparément les en-têtes HTTP de sécurité Vercel et tester l'expérience complète en navigateur sur mobile.
+
+## Relève additionnelle : correction des en-têtes Vercel (2026-10-15/16)
+- Fait nouveau : la **racine effective** du projet Vercel est `site/`, et non la racine Git. Les headers déclarés uniquement dans `vercel.json` au niveau Git ne s'appliquaient donc pas. L'ajout de `site/vercel.json` a résolu le problème, confirmé par la réponse HTTP du serveur Vercel.
+- Diagnostic temporaire `X-Locactif-Config` supprimé ; les règles finales sont identiques dans les deux configs. `site/404.css` (nouveau fichier) remplace la CSS inline de la page 404 pour respecter la CSP.
+- Dernier **commit de code** vérifié : `f868b7f31bac2b28c82f207eac42216161c8d9a9` ; GitHub Actions run `38844937710` SUCCESS avec `validate` et `smoke`, job smoke ID `116793247261`. En-têtes réels : X-Robots-Tag, nosniff, X-Frame-Options DENY, Referrer-Policy, Permissions-Policy et CSP avec frame-ancestors none.
+- Les fichiers de relève actualisés dans un commit suivant doivent être contrôlés avec la **nouvelle SHA main** et la nouvelle CI (ne jamais prédire un commit SHA).
+- Statut fonctionnel : socle pré-lancement sécurisé et disponible sur `https://locactif-ca.vercel.app`. Domaine officiel `locactif.ca` encore indépendant. Aucune réservation/commande réelle ni produit WooCommerce affiché.
+- Prochaine tâche exacte : vérifier `main`/Actions/Vercel du commit actuel ; retrouver l'instance WordPress d'origine en accès autorisé pour inspecter ses vraies offres ; puis import sélectif contrôlé avec `LOCACTIF_CATEGORY_IDS`. Après contrat API, intégrer TAKATAK Auth avec isolation tenant. Aucun secret à pousser sur Git.

@@ -69,3 +69,8 @@ Le même schéma `site/catalog-schema.mjs` est appliqué au fichier publié, à 
 Les pages conservent les termes de recherche et la catégorie au passage vers une fiche et au retour. La date du dernier import apparaît lorsqu'une liste réelle est publiée. Les favoris restent locaux à l'appareil, sans compte ni synchronisation TAKATAK non vérifiée.
 
 Le système de vérification n'interroge jamais de commandes clients WooCommerce et ne collecte aucun identifiant.
+
+## En-têtes HTTP Vercel — corrigés et vérifiés
+Le projet Vercel utilise le sous-dossier `site/` comme racine active. Par conséquent **`site/vercel.json` est la configuration effectivement appliquée**, tandis que `vercel.json` dans le dépôt garde une configuration équivalente pour les déploiements depuis la racine. Les règles de sécurité des deux fichiers sont testées pour empêcher toute divergence.
+
+Depuis le commit `f868b7f`, le smoke CI vérifie directement sur HTTPS les en-têtes `X-Robots-Tag`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` et la CSP stricte (`frame-ancestors 'none'`). Les tests sont **réellement passés** sur l'alias de production. Toute disparition des en-têtes fait échouer le pipeline.

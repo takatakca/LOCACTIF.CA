@@ -67,3 +67,13 @@ Utiliser dans Vercel le dernier déploiement marqué READY associé à un SHA co
 8. Les pages `explore.html` et `experience.html` annoncent la date du dernier import lorsqu'elle existe ; absence d'horaires ou transaction locale demeure explicite.
 
 Les réponses publiques de Vercel ne comportaient pas l'en-tête `X-Robots-Tag` lors du dernier audit malgré `vercel.json` ; ne pas retirer les balises HTML `noindex` et `robots.txt`. Il reste nécessaire de comparer les en-têtes réels à la configuration.
+
+## Résolution de la configuration active (2026-10-15/16)
+- Projet Vercel `locactif-ca` : racine effective du projet Git = `site/`. La seule présence du fichier à la racine Git `vercel.json` **ne suffit pas** pour les en-têtes HTTP de ce projet.
+- Nouveau `site/vercel.json` : règles actives pour tous les chemins et règles explicites pour `/`, `/explore.html` et `/experience.html`. Le fichier `vercel.json` principal conserve la politique équivalente, avec `outputDirectory: site` pour la compatibilité du dépôt racine.
+- `tests/deployment.test.mjs` compare les règles des deux fichiers et exige `frame-ancestors 'none'`.
+- Commit `f868b7f31bac2b28c82f207eac42216161c8d9a9` : contrôle de code et smoke HTTPS `38844937710` **SUCCESS**. Journal du job smoke `116793247261` : réponse réelle contenant `X-Robots-Tag=noindex, nofollow`, `X-Content-Type-Options=nosniff`, `X-Frame-Options=DENY`, `Referrer-Policy`, `Permissions-Policy` et `Content-Security-Policy`.
+- Le marqueur temporaire `X-Locactif-Config` a été retiré. Les routes 404 utilisent maintenant `site/404.css` externe pour respecter `style-src 'self'`.
+- Ne pas supprimer les tests d'en-têtes pour rendre une publication artificiellement verte. Une erreur indique un changement de racine Vercel, une régression du fichier de configuration ou une divergence HTTP à expliquer.
+
+La mention antérieure d'en-têtes absents correspond à **l'état avant correction** ; la politique vérifiée à partir du commit indiqué ci-dessus la remplace.

@@ -6,7 +6,7 @@
 |---|---|---|---|
 | LOC-001 Audit dépôt et décisions | TERMINÉ | P0 | Main, arbre, PR/issues, dernier SHA vérifiés |
 | LOC-002 Accueil bilingue responsive | TERMINÉ | P0 | UI FR/EN et tests intégrés |
-| LOC-003 Sécurité statique / Vercel | PARTIEL | P0 | `site/` publié, .html fonctionne ; divergence headers Vercel à examiner |
+| LOC-003 Sécurité statique / Vercel | TERMINÉ POUR LE SOCLE | P0 | `site/` publié, .html fonctionne ; sécurité HTTP, CSP, noindex vérifiés depuis Actions |
 | LOC-004 Journaux de relève | TERMINÉ | P1 | Cinq documents et AGENTS.md |
 | LOC-005 CI et vérification HTTP | TERMINÉ pour le site de préparation | P0 | GitHub CI et smoke HTTP SUCCESS, Vercel READY même SHA |
 | LOC-006 Catalogue Explorer | TERMINÉ côté front | P0 | Recherche/filtres/favoris locaux |
@@ -17,7 +17,7 @@
 | LOC-011 Admin opérateurs, paiements, support | NON DÉMARRÉ | P1 | Modèles, API et fonctionnalités selon exigences approuvées |
 | LOC-012 Domaine locactif.ca | BLOQUÉ | P0 | Inventaire WordPress, DNS/HTTPS validés et bascule sans interruption |
 | LOC-013 QA end-to-end | PARTIEL | P1 | Smoke HTTP + tests d'import isolé ; navigateur et réservations réelles à vérifier après accès métier |
-| LOC-014 En-têtes HTTP Vercel | À INVESTIGUER | P1 | Identifier cause `X-Robots-Tag` absent ; déployer fix puis tester l'en-tête réellement reçu |
+| LOC-014 En-têtes HTTP Vercel | TERMINÉ | P1 | Config active déplacée dans `site/vercel.json`, CSP stricte, tests HTTP confirmés |
 | LOC-015 Renouvellement du domaine | À VÉRIFIER | P0 | Avis de renouvellement : 2026-11-03 ; confirmer le statut auprès du registraire pour éviter une rupture de service |
 
 | LOC-016 Intégrité et navigation du catalogue | TERMINÉ | P1 | Schéma commun serveur/navigateur, retour aux filtres et affichage date d'import testés |

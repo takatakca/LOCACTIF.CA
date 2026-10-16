@@ -40,3 +40,9 @@ Des messages de surveillance datés du 5 au 8 octobre 2026 démontrent une insta
 - Nouveau `site/catalog-schema.mjs` réutilisé par le navigateur et le programme de validation. Les fiches affichent la date exacte du dernier import seulement lorsqu'elle existe ; navigation recherche/catégorie conservée jusqu'à la fiche et au retour.
 - Tests unitaires supplémentaires pour API WooCommerce simulée localement (jamais affichée comme données réelles) et contrôles des liens.
 - **Ne pas confondre ces validations avec une réservation fonctionnelle :** source `locactif.ca` toujours inaccessible en HTTP pour WordPress REST, aucune offre publiée, aucun TAKATAK Auth, aucune prise de paiement.
+
+## Sécurité HTTP consolidée (2026-10-15/16)
+- Ancien écart `X-Robots-Tag` absent : **résolu**, non plus une anomalie active. Cause vérifiée : le projet Vercel lit `site/vercel.json` comme fichier de configuration.
+- Commit de code vérifié `f868b7f31bac2b28c82f207eac42216161c8d9a9` : GitHub Actions CI `38844937710` SUCCESS (validation + HTTP smoke), en-têtes réellement observés sur la production, dont `Content-Security-Policy` avec `frame-ancestors 'none'`.
+- Les protections HTTP sont vérifiées pour les trois pages HTML principales. Les fichiers `vercel.json` (racine Git) et `site/vercel.json` (racine effective de Vercel) sont harmonisés et testés.
+- Ce succès n'affecte pas les blocages métier : catalogue WooCommerce historique indisponible, réservations, paiements, TAKATAK Auth, permissions et domaine commercial non migrés.
