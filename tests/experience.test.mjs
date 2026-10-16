@@ -30,3 +30,14 @@ test("catalog rejects malicious, invalid or incomplete records", () => {
   assert.ok(validateCatalog({...good,imported_at:null}).some(x=>x.includes("imported_at")));
   assert.ok(validateCatalog({...good,source_origin:"http://127.0.0.1"}).some(x=>x.includes("HTTPS")));
 });
+
+
+test("published offers display truthful import time in both languages", () => {
+  for (const p of ["explore","experience"]) {
+    assert.match(fromSite(p+".html"),/data-provenance/);
+    const script=fromSite(p+".js");
+    assert.match(script,/importedAt = catalog\.imported_at/);
+    assert.match(script,/lastSync/);
+    assert.ok(!script.includes("innerHTML"));
+  }
+});

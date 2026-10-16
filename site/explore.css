@@ -7,3 +7,5 @@
 @media(max-width:390px){.header-inner{flex-wrap:wrap;gap:5px}.explore-nav{margin-left:auto}.explore-nav a{font-size:11px}.header-inner>.language{margin-left:auto}}
 
 .experience h3 a:hover,.experience h3 a:focus-visible{color:var(--lime)}
+
+.catalog-provenance{font-size:12px;color:var(--muted);margin:3px 0 16px}.catalog-provenance[hidden]{display:none}

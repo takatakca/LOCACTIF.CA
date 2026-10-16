@@ -8,3 +8,5 @@
 @media(max-width:900px){.detail-card{grid-template-columns:1fr}.detail-art{min-height:190px;font-size:105px}.detail-content{padding:30px}.detail-main{padding-bottom:65px}}
 @media(max-width:720px){.detail-nav{margin:0;gap:12px}.detail-nav a{font-size:12px}.header-inner>.language{padding:3px}.header-inner>.language button{font-size:11px}.logo{font-size:18px}.logo-mark{display:none}.detail-content h1{font-size:40px}.detail-actions{flex-direction:column}.detail-actions .button{width:100%}}
 @media(max-width:390px){.header-inner{flex-wrap:wrap;gap:5px}.detail-nav{margin-left:auto}.detail-nav a{font-size:11px}.header-inner>.language{margin-left:auto}}
+
+.detail-provenance{font-size:12px;color:var(--muted);margin:20px 0}.detail-provenance[hidden]{display:none}

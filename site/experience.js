@@ -6,7 +6,7 @@ const copy = {
   fr: {
     skip:"Aller au contenu",home:"Accueil",catalog:"Explorer",back:"Retour aux expériences",
     eyebrow:"Expérience locale",priceLabel:"Tarif publié",booking:"Consulter l'offre originale",
-    notice:"Les prix et les disponibilités peuvent changer. Vérifiez les horaires, les conditions et la réservation sur le site de l'organisateur. Aucun paiement n'est traité ici.",
+    lastSync:"Dernier import des informations",notice:"Les prix et les disponibilités peuvent changer. Vérifiez les horaires, les conditions et la réservation sur le site de l'organisateur. Aucun paiement n'est traité ici.",
     footer:"Des expériences près de vous.",loadingTitle:"Chargement de l'expérience…",loadingMessage:"Consultation du catalogue.",
     missingTitle:"Cette expérience est introuvable.",missingMessage:"Ce lien est peut-être ancien. Consultez le catalogue pour découvrir les offres actuellement publiées.",
     errorTitle:"Catalogue indisponible.",errorMessage:"Impossible de charger les informations de cette expérience. Réessayez plus tard.",
@@ -16,7 +16,7 @@ const copy = {
   en: {
     skip:"Skip to content",home:"Home",catalog:"Explore",back:"Back to experiences",
     eyebrow:"Local experience",priceLabel:"Published price",booking:"View original listing",
-    notice:"Prices and availability can change. Confirm schedules, terms and bookings on the organizer's site. No payment is processed here.",
+    lastSync:"Last information import",notice:"Prices and availability can change. Confirm schedules, terms and bookings on the organizer's site. No payment is processed here.",
     footer:"Experiences near you.",loadingTitle:"Loading experience…",loadingMessage:"Checking the catalog.",
     missingTitle:"Experience not found.",missingMessage:"This link may be outdated. Visit the catalog to see currently published offers.",
     errorTitle:"Catalog unavailable.",errorMessage:"This experience cannot be loaded right now. Please try again later.",
@@ -28,6 +28,7 @@ const copy = {
 const storageKey = "locactif.favorites";
 let locale = "fr";
 let item = null;
+let importedAt = null;
 let status = "loading";
 let favorites = [];
 try {
@@ -71,6 +72,12 @@ function renderItem() {
   }
   find("[data-price]").textContent = price;
   updateFavorite();
+  const provenance = find("[data-provenance]");
+  provenance.hidden = !importedAt;
+  if (importedAt) {
+    const date = new Intl.DateTimeFormat(locale === "fr" ? "fr-CA" : "en-CA",{dateStyle:"medium",timeStyle:"short"}).format(new Date(importedAt));
+    provenance.textContent = w.lastSync + " : " + date;
+  }
   document.title = item.name + " — LOCACTIF";
 }
 function setLocale(lang) {
@@ -119,6 +126,7 @@ if (!desiredId || !/^[1-9][0-9]{0,15}$/.test(desiredId)) {
       throw new Error("Invalid product");
     } else {
       item = match;
+      importedAt = catalog.imported_at;
       find("[data-booking]").href = safeBookingUrl(item.url,[origin.origin]);
       setState("ready");
       renderItem();

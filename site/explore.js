@@ -27,7 +27,7 @@ const words = {
     noMatchTitle:"No results",noMatchDescription:"Try other search terms or clear your filters.",
     noFavoriteTitle:"No favorites yet",noFavoriteDescription:"Save experiences on this device to find them here.",
     errorTitle:"Catalog unavailable",errorDescription:"We cannot load experiences right now. Please try again later.",
-    priceUnknown:"See pricing",reserve:"View offer ↗",save:"Save to favorites",unsave:"Remove from favorites",categoryFallback:"Experience"
+    priceUnknown:"See pricing",lastSync:"Last catalog import",reserve:"View offer ↗",save:"Save to favorites",unsave:"Remove from favorites",categoryFallback:"Experience"
   }
 };
 
@@ -36,6 +36,7 @@ const searchInput = $("[data-search]");
 let locale = "fr";
 let items = [];
 let sourceOrigin = null;
+let importedAt = null;
 let error = false;
 let view = "all";
 let category = params.get("category") || "";
@@ -60,7 +61,16 @@ function setLocale(next) {
   searchInput.placeholder = words[locale].searchPlaceholder;
   $("[data-lang-group]").setAttribute("aria-label", locale === "fr" ? "Choix de langue" : "Language selection");
   render();
+  renderProvenance();
   try { localStorage.setItem("locactif.language", locale); } catch {}
+}
+function renderProvenance() {
+  const node = $("[data-provenance]");
+  node.hidden = !importedAt;
+  if (importedAt) {
+    const date = new Intl.DateTimeFormat(locale === "fr" ? "fr-CA" : "en-CA", {dateStyle:"medium",timeStyle:"short"}).format(new Date(importedAt));
+    node.textContent = words[locale].lastSync + " : " + date;
+  }
 }
 function refreshUrl() {
   const next = new URL(window.location.href);
@@ -158,8 +168,10 @@ try {
   const errors = validateCatalog(catalog);
   if (errors.length) throw new Error("Invalid catalog");
   sourceOrigin = new URL(catalog.source_origin).origin;
+  importedAt = catalog.imported_at;
   items = catalog.items;
 } catch {
   error = true;
 }
 render();
+renderProvenance();
