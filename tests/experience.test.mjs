@@ -16,7 +16,7 @@ test("experience page has real data placeholders and a secure source-only outbou
   assert.match(js,/safeBookingUrl/);
   assert.ok(!js.includes("innerHTML"));
   const explore=fromSite("explore.js");
-  assert.match(explore,/experience\.html\?id=/);
+  assert.match(explore,/experienceHref\(item\.id, searchInput\.value, category\)/);
 });
 
 test("catalog rejects malicious, invalid or incomplete records", () => {
