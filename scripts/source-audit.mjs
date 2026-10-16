@@ -1,4 +1,4 @@
-import { lookup } from "node:dns/promises";
+import { lookup, resolveNs, resolveSoa } from "node:dns/promises";
 
 const allowedHosts = new Set(["locactif.ca","www.locactif.ca"]);
 const origins = ["https://locactif.ca", "https://www.locactif.ca"];
@@ -31,7 +31,7 @@ async function request(path, origin) {
       }
       text+=decoder.decode();
     }
-    return {status:response.status,url:current.href,contentType:response.headers.get("content-type")||"",body:text};
+    return {status:response.status,url:current.href,contentType:response.headers.get("content-type")||"",server:response.headers.get("server")||"not advertised",poweredBy:response.headers.get("x-powered-by")||"not advertised",body:text};
   }
   throw new Error("More than three redirects");
 }
@@ -42,18 +42,30 @@ for (const origin of origins) {
   console.log("SOURCE:",origin);
   try {
     const addresses=await lookup(domain,{all:true});
-    console.log("DNS:",addresses.length ? "resolves ("+addresses.length+" records)" : "no records");
+    console.log("DNS:",addresses.length ? addresses.map(x=>x.address).join(", ") : "no records");
   } catch(error) {
     console.log("DNS: unavailable ("+error.code+")");
   }
+  try {
+    const ns=await resolveNs(domain);
+    console.log("Authoritative NS:",ns.join(", ") || "none");
+  } catch(error) { console.log("Authoritative NS: unavailable ("+error.code+")"); }
+  try {
+    const soa=await resolveSoa(domain);
+    console.log("SOA primary server:",soa.nsname || "not reported");
+  } catch(error) { console.log("SOA: unavailable ("+error.code+")"); }
   for (const [label,path] of [
     ["homepage","/"],
+    ["index.php (historical WordPress entrypoint)","/index.php"],
+    ["WordPress login page (public GET only)","/wp-login.php"],
+    ["REST alternative permalink","/?rest_route=%2F"],
     ["wp-json index","/wp-json/"],
     ["WooCommerce Store API sample","/wp-json/wc/store/v1/products?per_page=1"]
   ]) {
     try {
       const r=await request(path,origin);
       console.log(label+": HTTP "+r.status+" at "+r.url+" ("+r.contentType+")");
+      if(label==="homepage") console.log("Web server header:",r.server,"| Technology header:",r.poweredBy);
       if(label==="homepage") {
         const html=r.body.toLowerCase();
         console.log("WordPress markup fingerprint:",html.includes("/wp-content/")||html.includes("wp-json") ? "detected" : "not detected");
