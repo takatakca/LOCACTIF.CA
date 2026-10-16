@@ -32,3 +32,12 @@ Les produits et leurs liens peuvent être lus depuis une API publique WooCommerc
 
 ## D-011 — Smoke sur preuves HTTP
 **2026-10-15.** GitHub Actions utilise `scripts/smoke.mjs` pour interroger l'alias Vercel en HTTPS. Les en-têtes `X-Robots-Tag` sont absents malgré leur déclaration ; la protection de pré-lancement est donc contrôlée au moyen de la balise `noindex` des pages HTML et de `robots.txt` tant que la configuration des headers Vercel reste à investiguer. On n'assimile pas READY à un test métier.
+
+## D-012 — Publication de catégories WooCommerce uniquement après approbation
+**2026-10-15, reprise nocturne.** L'API Store expose les produits publics mais n'identifie pas nécessairement toutes les offres comme de vraies **activités réservable**s. La commande `npm run inspect:catalog` ne fait qu'inventorier en lecture seule. `sync:catalog` requiert `LOCACTIF_CATEGORY_IDS` explicitement autorisés. Déduire une disponibilité de stock, d'un prix ou d'un plugin WordPress sans contrat vérifié est interdit. Les données passent par une validation identique dans la CI et dans le navigateur.
+
+## D-013 — Protection contre la perte de catalogue
+Un import public se termine sans écriture en cas d'erreur d'API, de JSON, de redirection, de doublons, d'inventaire tronqué, de source différente ou de forte baisse de produits. Une suppression de plus de 50 % des fiches existantes nécessite l'approbation explicite `CONFIRM_CATALOG_SHRINK=true`. Un import vide nécessite `ALLOW_EMPTY_CATALOG=true`. Aucun des deux ne doit être automatisé sans revue.
+
+## D-014 — Rechercher puis consulter sans perdre l'état
+La recherche et la catégorie sont transportées dans le lien de la fiche et du retour, sans informations sensibles ; un lien direct avec catégorie conserve le filtre au premier chargement. Les pages montrent la date d'import seulement si elle est réellement enregistrée.

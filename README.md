@@ -26,12 +26,21 @@ Ouvrir http://localhost:8080 puis http://localhost:8080/explore.html.
 Requiert l'accès à une **boutique WooCommerce validée** exposant l'API publique Store API. Ne pas utiliser un autre site arbitraire.
 
 ```bash
-LOCACTIF_WP_STORE_BASE_URL=https://votre-boutique-approuvee.example npm run sync:catalog
+# 1. Inventorier les catégories WooCommerce, sans écriture locale ni distante :
+LOCACTIF_WP_STORE_BASE_URL=https://votre-boutique-approuvee.example npm run inspect:catalog
+
+# 2. Après approbation des identifiants de catégories d'expériences :
+LOCACTIF_WP_STORE_BASE_URL=https://votre-boutique-approuvee.example LOCACTIF_CATEGORY_IDS=12,34 npm run sync:catalog
+
+# 3. Vérifier avant tout commit :
+npm run verify:catalog && npm run check
 ```
 
 - Aucune clé WooCommerce n'est utilisée ni demandée par cet import public.
-- Les produits sont filtrés pour garder les liens HTTPS de cette même origine.
-- Si la source échoue ou ne contient aucune offre valide, l'import refuse d'effacer le catalogue existant (sauf `ALLOW_EMPTY_CATALOG=true` explicite).
+- L'import de publication exige `LOCACTIF_CATEGORY_IDS` : liste explicite des catégories WooCommerce **réellement approuvées** comme activités/expériences. Aucun autre produit n'est publié par défaut.
+- Les produits hors stock, hors catégories et les enregistrements invalides sont exclus ; tous les liens sont contrôlés HTTPS même origine. Aucun créneau ni prix de réservation n'est généré.
+- Si l'API échoue, si une page est redirigée, si des doublons surviennent, si les réponses sont malformées ou si la liste dépasse 500 éléments, l'import échoue sans écriture. Un import vide est refusé sauf `ALLOW_EMPTY_CATALOG=true` après revue.
+- Si un nouvel import retire plus de la moitié du catalogue, il est refusé sauf `CONFIRM_CATALOG_SHRINK=true` après revue. Un changement d'origine avec un catalogue déjà rempli exige une intervention manuelle.
 - Après revue du résultat, ajouter `site/catalog.json` dans un commit : la publication passe par `main` et Vercel.
 - Les réservations/achats restent sur la boutique d'origine. Le présent front ne contient **aucun panier ni paiement local**.
 - Les favoris sur l'appareil ne constituent pas un compte utilisateur ; une future connexion requiert TAKATAK Auth avec entitlements appropriés.
@@ -53,3 +62,10 @@ Sur `main`, GitHub Actions exécute aussi le smoke HTTPS du site Vercel : `npm r
 Les sondes publiques exécutées sur GitHub Actions ont constaté : `locactif.ca` et `www.locactif.ca` résolvent en DNS, mais répondent HTTP 403 à la racine et HTTP 404 pour les endpoints WordPress/WooCommerce publics. **Aucun produit réel ne peut donc être importé depuis ces adresses à ce stade.** Voir [SOURCE_AUDIT.md](docs/SOURCE_AUDIT.md).
 
 Les chemins publics de la vitrine Vercel conservent les extensions `.html` (option `cleanUrls=false`). Le workflow GitHub valide maintenant ces chemins par de vrais appels HTTPS. L'alias Vercel est une **préparation** et ne remplace pas automatiquement les réservations historiques.
+
+## Qualité des données et expérience
+Le même schéma `site/catalog-schema.mjs` est appliqué au fichier publié, à l'importateur et au navigateur. Une réponse malformée bloque l'affichage plutôt que de créer des cartes ou des liens dangereux. Les catégories approuvées doivent représenter de vraies expériences — la seule présence d'un produit dans WooCommerce ne garantit **aucun créneau réservable**.
+
+Les pages conservent les termes de recherche et la catégorie au passage vers une fiche et au retour. La date du dernier import apparaît lorsqu'une liste réelle est publiée. Les favoris restent locaux à l'appareil, sans compte ni synchronisation TAKATAK non vérifiée.
+
+Le système de vérification n'interroge jamais de commandes clients WooCommerce et ne collecte aucun identifiant.

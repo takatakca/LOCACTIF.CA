@@ -33,3 +33,10 @@ Suivre `AGENTS.md`, `docs/AGENT_HANDOFF.md` et `docs/TASK_QUEUE.md`. Ne pas déc
 
 ## Signal externe de continuité
 Des messages de surveillance datés du 5 au 8 octobre 2026 démontrent une installation WordPress avec WooCommerce/Wordfence et modules de réservation/abonnement encore signalée récemment. Cela ne contredit pas les réponses 403/404 observées le 15 octobre : l'origine peut être indisponible ou filtrée. Un avis de renouvellement du domaine mentionne le **3 novembre 2026** ; vérifier son état chez le registraire sans afficher d'identifiants ni entreprendre de facturation.
+
+## Livraison supplémentaire du 15 octobre 2026 — durcissement de l'import
+- Référence contrôlée avant documentation : commit `411940cc1dc625e62244945ac98afdef72d992af`, CI `38844284219` SUCCESS avec smoke HTTP réel, Vercel `dpl_9KDnrMEAYmUdLToWaXvaJ3YJ46Kt` READY.
+- Importateur WooCommerce revu : inspection préalable de catégories via `npm run inspect:catalog`, catégories strictement autorisées pour `npm run sync:catalog`, exclusion des produits hors stock, échec fermé sur réponse erronée, redirection, doublons, dépassement de 500 et inventaire décroissant de plus de 50 % non approuvé.
+- Nouveau `site/catalog-schema.mjs` réutilisé par le navigateur et le programme de validation. Les fiches affichent la date exacte du dernier import seulement lorsqu'elle existe ; navigation recherche/catégorie conservée jusqu'à la fiche et au retour.
+- Tests unitaires supplémentaires pour API WooCommerce simulée localement (jamais affichée comme données réelles) et contrôles des liens.
+- **Ne pas confondre ces validations avec une réservation fonctionnelle :** source `locactif.ca` toujours inaccessible en HTTP pour WordPress REST, aucune offre publiée, aucun TAKATAK Auth, aucune prise de paiement.

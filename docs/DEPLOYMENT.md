@@ -55,3 +55,15 @@ Utiliser dans Vercel le dernier déploiement marqué READY associé à un SHA co
 - `cleanUrls=false` dans `vercel.json`. Ne **pas** réactiver `cleanUrls` sans changer tous les liens `.html`, la stratégie de dev local et les tests.
 - Le smoke a réellement relevé `X-Robots-Tag` absent en réponse ; la validation alternative des balises HTML noindex et du fichier robots a réussi. Les autres headers doivent être audités avant finalisation sécurité.
 - Sonde historique [38792613363](https://github.com/takatakca/LOCACTIF.CA/actions/runs/38792613363) : domaine apex/www DNS disponible, accueil HTTP 403, WordPress REST HTTP 404 et WooCommerce Store API HTTP 404. Ce n'est pas une source importable : voir `docs/SOURCE_AUDIT.md`.
+
+## Import sécurisé (mise à jour 2026-10-15, session suivante)
+1. Confirmer l'instance WordPress **correcte** avant de renseigner `LOCACTIF_WP_STORE_BASE_URL`. Dernier audit apex et www : 403/404 ; aucune importation réelle possible sur ces URL en l'état.
+2. `LOCACTIF_WP_STORE_BASE_URL=https://ORIGINE_APPROUVEE npm run inspect:catalog` : consultation **sans écriture**, affiche uniquement le nombre et les IDs/noms de catégories.
+3. Approuver les catégories d'activités et exécuter `LOCACTIF_WP_STORE_BASE_URL=https://ORIGINE_APPROUVEE LOCACTIF_CATEGORY_IDS=12,34 npm run sync:catalog`.
+4. Le programme rejette : HTTP anormal, redirections, MIME JSON invalide, réponses mal formées, doublons et plus de 500 produits potentiels. Les produits hors catégorie/hors stock et les fiches malformées ne sont pas importés.
+5. Une suppression supérieure à 50 % par rapport au catalogue présent est refusée ; `CONFIRM_CATALOG_SHRINK=true` exige une vérification humaine de la source et des exclusions. `ALLOW_EMPTY_CATALOG=true` ne s'utilise qu'après approbation d'un catalogue vide.
+6. `npm run check` inclut validation de `site/catalog.json` et tests de l'import avec données de test **isolées**, qui ne sont jamais publiées.
+7. Examiner les permaliens, catégories, prix, règles et durées avant de committer le catalogue réel puis vérifier CI et smoke HTTPS. L'API publique ne prouve pas que des créneaux sont disponibles.
+8. Les pages `explore.html` et `experience.html` annoncent la date du dernier import lorsqu'elle existe ; absence d'horaires ou transaction locale demeure explicite.
+
+Les réponses publiques de Vercel ne comportaient pas l'en-tête `X-Robots-Tag` lors du dernier audit malgré `vercel.json` ; ne pas retirer les balises HTML `noindex` et `robots.txt`. Il reste nécessaire de comparer les en-têtes réels à la configuration.

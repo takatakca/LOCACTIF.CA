@@ -1,48 +1,48 @@
 # AGENT_HANDOFF — LOCACTIF.CA
 
-Révision : 2026-10-15. Dépôt `takatakca/LOCACTIF.CA`, branche de publication `main`.
+Mise à jour : 2026-10-15, reprise du dépôt `takatakca/LOCACTIF.CA` sur `main`.
 
 ## Dernière tâche terminée
-Correction d'une vraie anomalie de déploiement : Vercel répondait HTTP 404 sur les liens `.html` alors que l'option `cleanUrls=true` activait les chemins sans extension. Désactivation de `cleanUrls`, puis job GitHub Actions **smoke HTTP SUCCESS** et Vercel READY. Ajout d'une sonde WordPress historique apex + www, en lecture seule.
+Stabilisation du catalogue et amélioration des liens de fiches :
+- `site/catalog-schema.mjs` partage une validation stricte des offres avec le navigateur, les tests et l'importateur.
+- `npm run inspect:catalog` inventorie l'API WooCommerce sans modifier de fichier ni de commande.
+- `npm run sync:catalog` exige des IDs de catégories réellement approuvés ; vérifie les pages JSON, les doublons, les ruptures de pagination, la source d'origine et les baisses de catalogue supérieures à 50 %.
+- Les fiches conservent la recherche/catégorie et la date réelle du dernier import est affichée.
+- Ajout de tests isolés pour faux appels réseau (fixtures **uniquement dans les tests**).
+- Correctif du test de lien qui attendait auparavant une URL construite en dur.
 
-## Tâche actuellement en cours
-LOC-009/007 : retrouver l'origine WordPress/WooCommerce et ses offres réelles ; les endpoints publics actuellement testés sont indisponibles HTTP 403/404. Secondaire : LOC-014 divergence des en-têtes Vercel.
+## Tâche en cours
+LOC-009 / LOC-007 : retrouver l'origine WordPress historique et son inventaire WooCommerce réel ; la source publique apex/www a retourné HTTP 403/404 lors de la dernière sonde. De manière indépendante, LOC-014 : comparer les en-têtes Vercel réellement exposés à `vercel.json` avant de supprimer les protections HTML existantes.
 
-## Dernier commit poussé et preuves
-- Dernier SHA technique dont CI et Vercel sont confirmés avant mise à jour de ce fichier : `6973794c74bdcaf6e31948c95392a95132f1bb73`.
-- GitHub CI `38792613374` : SUCCESS (validate + smoke). Sonde publique `38792613363` : SUCCESS (exécution correcte, **résultat source non accessible**).
-- Vercel `dpl_C22E37SKqHE8y1kBRGQzBMTxCdXA` : READY, `meta.githubCommitSha = 6973794c...`.
-- **Pour ce commit documentaire**, consulter `git rev-parse HEAD` et la CI/production réelle après push ; ne pas prédire le SHA du commit courant.
+## Commit, vérifications et déploiement
+- Dernier commit fonctionnel validé avant ce document : `411940cc1dc625e62244945ac98afdef72d992af`.
+- CI GitHub `38844284219` : `completed/success`, tests Node.js et job `smoke` HTTPS de l'alias Vercel inclus.
+- Vercel production `dpl_9KDnrMEAYmUdLToWaXvaJ3YJ46Kt` : READY lié à `411940cc...`.
+- Pour ce commit documentaire ultérieur : retrouver le SHA exact dans GitHub `main`, confirmer la nouvelle CI et le déploiement Vercel sur ce SHA avant de conclure.
+- Pages publiques vérifiées auparavant : `/`, `/explore.html`, `/experience.html`, CSS/JS, `/catalog.json`, `/robots.txt`, `/health.json`. Domaine publié : https://locactif-ca.vercel.app (distinct de https://locactif.ca).
 
-## Fichiers modifiés durant cette session
-`site/experience.html`, `site/experience.css`, `site/experience.js`, `site/explore.js`, `site/explore.css`, `scripts/catalog-verify.mjs`, `scripts/woocommerce-import.mjs`, `scripts/smoke.mjs`, `scripts/source-audit.mjs`, `tests/experience.test.mjs`, `tests/deployment.test.mjs`, `package.json`, `vercel.json`, `.github/workflows/site.yml`, `.github/workflows/source-audit.yml`, `README.md`, `AGENTS.md`, `docs/*.md`.
+## Fichiers modifiés dans cette session
+`site/catalog-schema.mjs` (nouveau), `site/catalog-utils.mjs`, `site/explore.js`, `site/explore.html`, `site/explore.css`, `site/experience.js`, `site/experience.html`, `site/experience.css`, `scripts/catalog-verify.mjs`, `scripts/catalog-import-core.mjs` (nouveau), `scripts/woocommerce-import.mjs`, `tests/catalog-import.test.mjs` (nouveau), `tests/catalog.test.mjs`, `tests/experience.test.mjs`, `package.json`, `README.md`, `docs/PROJECT_STATUS.md`, `docs/TASK_QUEUE.md`, `docs/DECISIONS.md`, `docs/DEPLOYMENT.md`, `docs/AGENT_HANDOFF.md`.
 
-## Commandes, contrôles, preuves
-1. GitHub API : branche/arbre, code/README/docs, commits, issues et PR (aucune ouverte), workflow CI et détails/jobs/logs.
-2. Vérifications `npm run check` exécutées par la CI GitHub, SUCCESS. Vérification des routes HTTP depuis GitHub Actions (GET `/`, `/explore.html`, `/experience.html`, CSS/JS, catalogue, robots, health) SUCCESS après correction du routage.
-3. Vercel projet `prj_w4GSNu30m0PkDrQ0vQ74GSCY5bFj` : production READY sur SHA correspondants.
-4. Source audit GitHub Actions read-only : `https://locactif.ca` et `https://www.locactif.ca` résolvent ; les deux `/` HTTP 403 ; les deux `/wp-json/` et `/wp-json/wc/store/v1/products?per_page=1` HTTP 404. Rapport `docs/SOURCE_AUDIT.md`.
-5. Terminal local `curl` sur les deux sites : DNS indisponible depuis ce conteneur (GitHub runner est l'origine indépendante des requêtes HTTP concluantes).
-6. Les appels Vercel fichiers/logs explicitement scoped ont renvoyé HTTP 403. Ne pas réessayer inchangés.
+## Commandes / contrôles
+- GitHub API : lecture branche/arbre/code/docs, dernière CI, PR/issues ouvertes (0/0), historique Vercel.
+- GitHub Actions (`npm run check` -> vérification JS, schéma `catalog.json`, tests Node.js) et `node scripts/smoke.mjs https://locactif-ca.vercel.app` : succès constaté pour `411940cc...`.
+- Vercel : `meta.githubCommitSha` et état READY confirmés pour le SHA ci-dessus.
+- Import WooCommerce réel : **non lancé**, endpoint WordPress refusant l'accès public. Les données des tests sont des objets locaux synthétiques, jamais des offres affichées.
+- Nouveau processus après levée du blocage source : `LOCACTIF_WP_STORE_BASE_URL=https://ORIGINE_APPROUVEE npm run inspect:catalog` puis choisir les IDs d'activités et exécuter `LOCACTIF_WP_STORE_BASE_URL=... LOCACTIF_CATEGORY_IDS=... npm run sync:catalog`.
 
-## Erreurs connues et accès requis
-- WordPress historique et ses réservations réelles : **origine et accès non établis** ; besoin d'un accès d'hébergement autorisé ou de l'URL du véritable WordPress en service.
-- Intégration TAKATAK Auth/entitlements/tenants non construite faute de contrat API et de parcours validés. Ne pas créer un système d'identité concurrent.
-- `locactif.ca` n'est **pas** basculé sur Vercel ; préserver tout service historique.
-- En-tête `X-Robots-Tag` absent de la réponse Vercel observée malgré `vercel.json`. HTML noindex et robots.txt vérifiés; investiguer ultérieurement.
-- `site/catalog.json` vide : aucun produit fictif, aucune commande locale.
-
-## Statut réel du déploiement
-Le site de préparation est déployé sur l'alias https://locactif-ca.vercel.app, avec tests HTTP réussis pour le commit de référence `6973794c...`. Le produit métier de réservation n'est **pas fini**. Pour le SHA documentaire courant, vérifier nouveau run et déploiement.
+## Erreurs et accès nécessaires
+- `locactif.ca` et `www.locactif.ca` : accueil HTTP 403, WP REST/Store API HTTP 404 lors du dernier audit `38792613363`. Voir `docs/SOURCE_AUDIT.md`. WordPress, commandes et plugins historiques **ne doivent pas être modifiés** tant que leur emplacement n'est pas identifié.
+- Contrat TAKATAK Auth, entitlements produit et modèle de permissions tenant manquants ; ne pas déployer une autorité concurrente.
+- Aucun panier, paiement, réservation réelle ou synchronisation de favoris multi-appareils actuellement.
+- En-tête `X-Robots-Tag` absent dans la réponse Vercel précédemment observée ; balises HTML `noindex` et robots.txt servent de protection contrôlée.
+- Certains endpoints de logs Vercel ont renvoyé 403 de scope ; lecture des métadonnées fonctionne.
+- Avis de renouvellement du domaine `locactif.ca` pour le 2026-11-03 ; statut à confirmer chez le registraire. Ne pas entreprendre d'opération payante sans autorisation.
 
 ## Prochaine action exacte
-1. Lire `AGENTS.md`, ce fichier, `docs/SOURCE_AUDIT.md` puis `docs/TASK_QUEUE.md`.
-2. Confirmer dernier `main`, CI (incluant smoke), et déploiement Vercel READY du même SHA.
-3. Inspecter l'hébergement de `locactif.ca` et les sauvegardes/chemins WordPress depuis un accès autorisé : expliquer HTTP 403/404, identifier l'API Store et ses vraies offres. Ne pas réécrire le DNS.
-4. Si l'API devient accessible, exécuter `npm run sync:catalog` avec l'origine de confiance, contrôler le catalogue et ses liens puis committer les offres.
-5. Réaliser ensuite booking et TAKATAK Auth selon les exigences démontrées ; corriger les en-têtes Vercel en maintenant la CI smoke.
-
-## Information additionnelle du 2026-10-15
-- Les derniers messages historiques disponibles indiquent une activité WordPress/Wordfence sur locactif.ca début octobre 2026, malgré les tests publics en HTTP 403/404 du 15 octobre. Ne pas supposer que WordPress a été supprimé ni que ses commandes peuvent être ignorées.
-- Avis de renouvellement du domaine pour le **2026-11-03** : vérifier le renouvellement auprès du registraire (pas d'action financière déléguée).
-- Le commit documentaire antérieur `3b300de930f0616a43e85a3dce1bef327d4ee7ff` a été vérifié GitHub CI SUCCESS (run `38792949651`) et Vercel READY (déploiement `dpl_DtBsi4ZbtntmrY413xPwjEzB9cMj`). Lire le head de `main` pour identifier le SHA exact de cette mise à jour supplémentaire.
+1. Lire `AGENTS.md`, `docs/AGENT_HANDOFF.md`, `docs/TASK_QUEUE.md`, `docs/SOURCE_AUDIT.md`.
+2. Contrôler le SHA GitHub `main`, GitHub Actions `validate` + `smoke` et Vercel production READY **sur le même SHA**.
+3. Retrouver l'instance WordPress réelle et vérifier son Store API public avec une autorisation appropriée. Inspecter l'inventaire **sans écriture** et noter les IDs de catégories des vraies activités.
+4. Une fois les catégories confirmées, importer le catalogue avec protections, vérifier les prix/URLs/conditions de réservation puis committer et publier.
+5. Ensuite implémenter TAKATAK SSO + entitlements vérifiés côté serveur, commandes/réservations et droits des opérateurs, en utilisant un contrat API approuvé ; ne pas bricoler de connexion fictive.
+6. Réinvestiguer séparément les en-têtes HTTP de sécurité Vercel et tester l'expérience complète en navigateur sur mobile.
