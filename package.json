@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "node --test",
-    "check": "node --check site/app.js && node --check site/translations.mjs && node --check site/explore.js && node --check site/experience.js && node --check scripts/woocommerce-import.mjs && node --check scripts/catalog-import-core.mjs && npm run verify:catalog && npm test",
+    "check": "node --check site/app.js && node --check site/translations.mjs && node --check site/explore.js && node --check site/experience.js && node --check scripts/woocommerce-import.mjs && node --check scripts/catalog-import-core.mjs && node --check scripts/catalog-publish.mjs && npm run verify:catalog && npm test",
     "sync:catalog": "node scripts/woocommerce-import.mjs",
     "verify:catalog": "node scripts/catalog-verify.mjs",
     "smoke": "node scripts/smoke.mjs",
