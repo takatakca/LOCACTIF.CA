@@ -45,8 +45,8 @@ Date de la note : 2026-10-29. Lecture seule pour la vérification ; aucun code p
 ## 5. Poussé
 
 - Code : RIEN. Aucun commit sur `main`, aucun merge, aucun déploiement.
-- Note GitHub : PR (voir ci-dessous).
-- Note Drive : fichier « 2026-10-29 — KLEAN — locactif — note de travail.md » dans « 00 — Opérations TAKATAK » (voir ci-dessous).
+- Note GitHub : PR #1 — https://github.com/takatakca/LOCACTIF.CA/pull/1 (branche `klean/locactif-note-2026-10-29`, fichier `docs/KLEAN-NOTE-LOCACTIF-2026-10-29.md`, commit `3e0b2753`). NON mergée.
+- Note Drive : fichier « 2026-10-29 — KLEAN — locactif — note de travail.md » dans « 00 — Opérations TAKATAK », ID Drive : 1ns3RPfD42p-tKbc0rq5R4-ENoITsHluB.
 
 ## 6. Blocages
 
